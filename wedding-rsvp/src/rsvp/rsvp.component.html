@@ -1,0 +1,133 @@
+<div class="invitation-rsvp" [attr.aria-busy]="busy()">
+  @if (step() < 5) {
+    <ol class="rsvp-progress" aria-label="RSVP progress">
+      @for (label of steps; track $index) {
+        <li [class.current]="step() === $index + 1" [class.complete]="step() > $index + 1" [attr.aria-current]="step() === $index + 1 ? 'step' : null">
+          <span>{{ step() > $index + 1 ? '✓' : $index + 1 }}</span>{{ label }}
+        </li>
+      }
+    </ol>
+  }
+
+  @if (step() === 1) {
+    <div class="step-panel">
+      <p class="eyebrow">YOUR INVITATION AWAITS</p>
+      <h3 #stepHeading tabindex="-1">Find your invitation</h3>
+      <p class="step-description">Enter your name as written on your invitation.</p>
+      <form (ngSubmit)="search()">
+        <label for="invitation-search">Name on your invitation</label>
+        <div class="search-field">
+          <span aria-hidden="true">⌕</span>
+          <input id="invitation-search" name="query" [ngModel]="query" (ngModelChange)="queryChanged($event)"
+            (focus)="searchFocused()" (blur)="searchBlurred()" (keydown)="searchKeydown($event)"
+            [disabled]="busy()" maxlength="120" autocomplete="off" placeholder="Search your name…"
+            role="combobox" aria-autocomplete="list" [attr.aria-expanded]="suggestionsOpen()"
+            aria-controls="invitation-suggestions"
+            [attr.aria-activedescendant]="activeSuggestion() >= 0 && suggestionsOpen() ? suggestionId(activeSuggestion()) : null"
+            aria-describedby="search-help">
+          @if (suggestionsOpen()) {
+            <div id="invitation-suggestions" class="autocomplete-menu" role="listbox" aria-label="Matching invitations">
+              @for (suggestion of suggestions(); track suggestion.id; let index = $index) {
+                <div class="autocomplete-option" role="option" [id]="suggestionId(index)"
+                  [class.active]="activeSuggestion() === index" [attr.aria-selected]="activeSuggestion() === index"
+                  (mouseenter)="activeSuggestion.set(index)" (mousedown)="$event.preventDefault(); selectSuggestion(suggestion)">
+                  <span><strong>{{ suggestion.label }}</strong><small>{{ suggestion.guests.length }} {{ suggestion.guests.length === 1 ? 'guest' : 'guests' }} invited</small></span>
+                  <span aria-hidden="true">→</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+        <p id="search-help" class="field-hint">You can search using the name of any guest on your invitation.</p>
+        <button class="button submit" type="submit" [disabled]="busy()">{{ busy() ? 'Finding your invitation…' : 'Find invitation' }}<span aria-hidden="true">↗</span></button>
+      </form>
+      @if (searched() && matches().length === 0) {
+        <div class="lookup-note" role="status"><strong>We couldn’t find your invitation.</strong><p>Try your full name or another name on your invitation. If you’re still having trouble, please contact Joshua or Judy Ann.</p></div>
+      }
+      @if (matches().length > 1) {
+        <div class="lookup-results"><p role="status">We found {{ matches().length }} invitations. Choose yours:</p>
+          @for (match of matches(); track match.id) {
+            <button type="button" class="invitation-match" (click)="chooseInvitation(match)"><span><strong>{{ match.label }}</strong><small>{{ match.guests.length }} {{ match.guests.length === 1 ? 'guest' : 'guests' }} invited</small></span><span aria-hidden="true">→</span></button>
+          }
+        </div>
+      }
+      @if (isMock) {<aside class="mock-guide"><strong>Try a sample invitation</strong><p>Juan & Maria Dela Cruz · Sofia Reyes · The Santos Family</p></aside>}
+    </div>
+  }
+
+  @if (invitation(); as invitation) {
+    @if (step() === 2) {
+      <div class="step-panel">
+        <p class="eyebrow">A PLACE JUST FOR YOU</p>
+        <h3 #stepHeading tabindex="-1">Is this your invitation?</h3>
+        <p class="step-description">We found your invitation:</p>
+        <div class="invitation-card"><span class="invitation-heart" aria-hidden="true">♡</span><h4>{{ invitation.label }}</h4><p>Your invitation is reserved for<br><strong>{{ invitation.guests.length }} {{ invitation.guests.length === 1 ? 'guest' : 'guests' }}.</strong></p><div class="invited-names">@for (guest of invitation.guests; track guest.id) {<span>{{ guest.name }}</span>}</div></div>
+        <button class="button submit" (click)="confirmIdentity()">{{ invitation.guests.length === 1 ? 'Yes, that’s me' : 'Yes, that’s us' }}<span aria-hidden="true">↗</span></button>
+        <button class="back-button" (click)="findAgain()">← Search for a different invitation</button>
+      </div>
+    }
+
+    @if (step() === 3) {
+      <div class="step-panel">
+        <p class="eyebrow">{{ invitation.label }}</p>
+        <h3 #stepHeading tabindex="-1">Will you join us?</h3>
+        <p class="step-description">We would love to celebrate with you.</p>
+        <form (ngSubmit)="continueAttendance()">
+          <fieldset class="attendance-options"><legend>Your attendance</legend>
+            <label [class.selected]="attendance === 'accepts'"><input type="radio" name="attendance" value="accepts" [(ngModel)]="attendance" (ngModelChange)="error.set('')"><span><strong>Joyfully accepts</strong><small>Let’s make a beautiful memory.</small></span><span class="choice-icon" aria-hidden="true">♡</span></label>
+            <label [class.selected]="attendance === 'declines'"><input type="radio" name="attendance" value="declines" [(ngModel)]="attendance" (ngModelChange)="error.set('')"><span><strong>Regretfully declines</strong><small>Sending our love from afar.</small></span></label>
+          </fieldset>
+          <button class="button submit" type="submit">Continue<span aria-hidden="true">↗</span></button>
+        </form>
+        <button class="back-button" (click)="back()">← Back to invitation</button>
+      </div>
+    }
+
+    @if (step() === 4) {
+      <div class="step-panel">
+        <p class="eyebrow">{{ invitation.label }}</p>
+        <h3 #stepHeading tabindex="-1">{{ attendance === 'accepts' ? 'Confirm your guests' : 'You’ll be missed' }}</h3>
+        <p class="step-description">{{ attendance === 'accepts' ? 'Let us know who will be celebrating with us.' : 'Thank you for letting us know. You’ll be with us in spirit.' }}</p>
+        <form (ngSubmit)="submit()">
+          <fieldset [disabled]="busy()" class="final-fields">
+            @if (attendance === 'accepts') {
+              <div class="guest-instructions" id="guest-selection-instructions">
+                <span aria-hidden="true">✓</span>
+                <p><strong>Who will be attending?</strong> Check every invited person who can join us. Uncheck any family member or additional guest who cannot attend.</p>
+              </div>
+              <fieldset class="guest-checklist" aria-describedby="guest-selection-instructions"><legend>Guests on your invitation</legend>
+                @for (guest of invitation.guests; track guest.id) {
+                  <label [class.checked]="selectedIds().includes(guest.id)"><input type="checkbox" [checked]="selectedIds().includes(guest.id)" (change)="toggleGuest(guest.id, $event)"><span><strong>{{ guest.name }}</strong></span><span class="guest-choice">{{ selectedIds().includes(guest.id) ? 'Attending' : 'Not attending' }}</span></label>
+                }
+              </fieldset>
+              <p class="guest-count" aria-live="polite">{{ selectedIds().length }} of {{ invitation.guests.length }} reserved {{ invitation.guests.length === 1 ? 'seat' : 'seats' }} confirmed</p>
+              <p class="field-hint">Only the named guests above are included in this invitation. You can change each checkbox before confirming.</p>
+            } @else {
+              <div class="decline-summary"><span aria-hidden="true">♡</span> Regretfully declines · No guests attending</div>
+            }
+            <label for="couple-message">A short message for the couple <small>(optional)</small></label><textarea id="couple-message" name="message" [(ngModel)]="message" rows="3" maxlength="1000" placeholder="Leave a little love for Joshua & Judy Ann…"></textarea>
+            <button class="button submit" type="submit" [disabled]="busy()">{{ busy() ? 'Confirming your RSVP…' : 'Confirm RSVP' }}<span aria-hidden="true">↗</span></button>
+          </fieldset>
+        </form>
+        <button class="back-button" (click)="back()" [disabled]="busy()">← Back to attendance</button>
+      </div>
+    }
+
+    @if (step() === 5 && receipt(); as receipt) {
+      <div class="rsvp-confirmation step-panel" role="status">
+        <span class="confirmation-icon" aria-hidden="true">💍</span>
+        <p class="eyebrow">{{ receipt.mode === 'mock' ? 'PREVIEW RSVP SAVED' : 'RSVP CONFIRMED' }}</p>
+        <h3 #stepHeading tabindex="-1">Thank you, {{ invitation.greeting }}!</h3>
+        <p>{{ receipt.mode === 'mock' ? 'Your RSVP has been saved for this preview.' : 'Your RSVP has been received.' }}</p>
+        <p>{{ attendance === 'accepts' ? 'We can’t wait to celebrate with you!' : 'We’ll miss you and will be thinking of you on our special day.' }}</p>
+        <div class="confirmation-summary"><strong>{{ attendance === 'accepts' ? 'Joyfully accepts' : 'Regretfully declines' }}</strong><span>{{ attendance === 'accepts' ? selectedIds().length : 0 }} {{ attendance === 'accepts' && selectedIds().length === 1 ? 'guest' : 'guests' }} attending</span></div>
+        @if (receipt.mode === 'mock') {<p class="preview-notice">This is a mock RSVP, saved only in this browser. Nothing has been sent to the couple.</p>}
+        <button class="button submit" (click)="edit()">Edit RSVP<span aria-hidden="true">↗</span></button>
+        <button class="back-button" (click)="findAgain()">Find another invitation</button>
+      </div>
+    }
+  }
+
+  @if (error()) {<p class="rsvp-error" role="alert">{{ error() }}</p>}
+  @if (isMock && step() < 5) {<p class="preview-notice">Sample invitations · Preview responses stay in this browser.</p>}
+</div>

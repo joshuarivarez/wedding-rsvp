@@ -1,0 +1,43 @@
+<autumn-leaves />
+<header class="header">
+  <a href="#home" class="brand-link" aria-label="Joshua and Judy Ann home"><wedding-logo /></a>
+  <button class="menu-toggle" (click)="menu.set(!menu())" [attr.aria-expanded]="menu()" aria-controls="navigation">{{ menu() ? 'Close ✕' : 'Menu ☰' }}</button>
+  <nav id="navigation" [class.open]="menu()" aria-label="Main navigation"><a href="#story" (click)="closeMenu()">Our story</a><a href="#gallery" (click)="closeMenu()">Gallery</a><a href="#details" (click)="closeMenu()">The day</a><a href="#notes" (click)="closeMenu()">Little details</a><a href="#rsvp" class="nav-rsvp" (click)="closeMenu()">Kindly RSVP <span>↗</span></a></nav>
+</header>
+<main>
+<section class="hero" id="home">
+  <div class="hero-copy"><div class="eyebrow"><span></span> TOGETHER IS A BEAUTIFUL PLACE TO BE</div><p class="intro">With full hearts, we invite you to celebrate</p><h1><span class="couple-name">Joshua <elegant-ampersand /></span><span class="couple-name">Judy Ann</span></h1><blockquote class="hero-verse"><p>“When the time is right,<br>I the Lord will make it happen”</p><cite>— Isaiah 60:22</cite></blockquote><div class="hero-date">MONDAY, FEBRUARY 08, 2027 <span>✦</span> 10 22 LIPA</div><p class="hero-location">4:00 PM · Alaminos Rd., Lipa City, Batangas</p><p class="hero-description">A little laughter, a few happy tears, and a lifetime of love.<br>Our next chapter begins with you by our side.</p><a href="#rsvp" class="button">Celebrate with us <span>↗</span></a><p class="deadline">We look forward to celebrating with you</p></div>
+  <div class="hero-art">
+    <div class="hero-frame">
+      <div class="hero-photo">
+        <div class="photo-arch"><img src="assets/hero-image.png" alt="Joshua and Judy Ann embracing" fetchpriority="high" style="height:100%;object-position:40% top"></div>
+        <div class="round-seal"><span>THE BEGINNING OF</span><b>forever</b><span>08 · 02 · 27</span></div>
+      </div>
+      <div class="photo-outline" aria-hidden="true"></div>
+      <div class="image-caption"><span>our favorite day, with our favorite people</span></div>
+    </div>
+  </div>
+  <a class="scroll-note" href="#story"><span>↓</span> A LOVE WORTH CELEBRATING</a>
+</section>
+<div class="date-ribbon"><span>A day for love.</span><span>A lifetime of us.</span><span>A celebration with you.</span><span class="ribbon-star">✳</span></div>
+<section class="story section reveal" id="story"><div class="story-image"><img loading="lazy" src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=85" alt="A couple sharing a quiet embrace"><span>and so, the adventure continues.</span></div><div class="story-copy"><p class="eyebrow">OUR STORY</p><h2>Some things are<br><em>meant to be.</em></h2><p>What started as a few chance encounters through mutual friends turned into a friendship built through simple chats and constant check-ins. As we got to know each other better, friendship blossomed into love. After a few dates, we officially became a couple on February 8, 2020.</p><p>On February 7, 2026, the proposal happened, making our journey even more special. Now, we are excited to begin our next chapter as we prepare to say “I do” on February 8, 2027—exactly seven years after our love story began.</p><div class="signature">From strangers, to friends, to forever. <span>♥</span></div></div></section>
+<wedding-gallery />
+<section class="day section reveal" id="details"><div class="section-heading"><p class="eyebrow">SAVE A LITTLE ROOM FOR MAGIC</p><h2>The <em>beautiful</em> day</h2><p>Monday, February 08, 2027 · 4:00 PM</p></div><div class="unplugged-notice"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="6" width="20" height="36" rx="3"></rect><path d="M20 10h8M21 37h6M8 8l32 32"></path></svg><div><p class="eyebrow">BE HERE WITH US</p><h3>An unplugged ceremony</h3><p>We kindly ask that phones and cameras remain silenced and tucked away during the ceremony. Please be fully present with us—our photographer will capture every special moment for everyone to enjoy.</p></div></div><div class="schedule"><article><span class="event-icon">♧</span><p class="eyebrow">THE DATE</p><h3>February 08, 2027</h3><p>Monday · 4:00 PM</p><p>A day for love,<br>and the beginning of forever.</p></article><article><span class="event-icon">♧</span><p class="eyebrow">THE VENUE</p><h3>10 22 Lipa</h3><p>Lipa City, Batangas</p><p>Our favorite people,<br>together in one special place.</p></article><article><span class="event-icon">✧</span><p class="eyebrow">FIND YOUR WAY</p><h3>See you in Lipa</h3><p>Alaminos Rd., Lipa City, Batangas</p><a class="text-button" href="https://maps.app.goo.gl/hEHciPn7qJmMpfPg9" target="_blank" rel="noopener noreferrer">View on Google Maps <span>↗</span></a></article></div><button class="text-button" (click)="calendar()">Add to your calendar <span>↗</span></button></section>
+<section class="notes section reveal" id="notes"><div><p class="eyebrow">A FEW THINGS TO KNOW</p><h2>It's all in the<br><em>little details.</em></h2><p>Come as you are, with a little extra sparkle.</p><div class="palette" aria-label="Wedding colors: taupe, terracotta, sage, camel, and mocha"><span style="--swatch:#b5a79a" title="Taupe"></span><span style="--swatch:#b86e54" title="Terracotta"></span><span style="--swatch:#9da58a" title="Sage"></span><span style="--swatch:#bd9366" title="Camel"></span><span style="--swatch:#705646" title="Mocha"></span></div><p class="palette-label">TAUPE · TERRACOTTA · SAGE · CAMEL · MOCHA</p></div><div class="faq"><details open><summary>What should I wear?<span>+</span></summary><p>
+  <b>Garden semi-formal.</b> Think light fabrics, earthy tones, and shoes that are happy on a garden path.
+  We encourage our guests to dress within our wedding color palette.<br><br>
+  We kindly ask our guests to <b>refrain from wearing white or champagne</b>, as these colors are reserved for the bride.
+</p></details><details><summary>Can I bring a plus-one?<span>+</span></summary><p>Please follow the guest list provided on your invitation. We’re keeping our celebration intimate and kindly ask that only the named guests attend.</p></details><details><summary>A note on gifts<span>+</span></summary><p>Your presence is our favorite present, and sharing this special day with you is more than enough. Should you wish to bless us with a gift, we would warmly appreciate a monetary gift in place of a physical one as we begin this new chapter together.</p></details><details><summary>Getting to the venue<span>+</span></summary><p>Join us at 10 22 Lipa, Alaminos Rd., Lipa City, Batangas. Our wedding ceremony begins at 4:00 PM. We would greatly appreciate your arrival by 3:30 PM, giving you plenty of time to settle in and get comfortable before the ceremony begins. <a class="text-button" href="https://www.google.com/maps/search/?api=1&amp;query=10%2022%20Lipa%2C%20Alaminos%20Rd.%2C%20Lipa%20City%2C%20Batangas" target="_blank" rel="noopener noreferrer">View on Google Maps ↗</a></p></details></div></section>
+<section class="rsvp-section" id="rsvp">
+  <div class="rsvp-wrap reveal">
+    <div class="rsvp-copy">
+      <p class="eyebrow">WE'VE SAVED YOU A SEAT</p>
+      <h2>Will you<br>join <em>us?</em></h2>
+      <p>It wouldn’t be the same without you.<br>Find your invitation and let us know if you can make it.</p>
+      <div class="rsvp-flower" aria-hidden="true">✳</div>
+      <p class="small-note">A day to remember.<br>A memory to keep forever.</p>
+    </div>
+    <div class="form-card"><wedding-rsvp /></div>
+  </div>
+</section>
+</main><footer><a href="#home" class="footer-logo" aria-label="Joshua and Judy Ann home"><wedding-logo /></a><a class="footer-names" href="#home">Joshua <elegant-ampersand /> Judy Ann</a><p>FEBRUARY 08, 2027 <span>·</span> WITH LOVE, ALWAYS</p><span class="footer-heart">♡</span></footer>

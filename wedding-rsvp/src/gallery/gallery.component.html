@@ -1,0 +1,31 @@
+<section class="gallery section reveal" id="gallery" aria-labelledby="gallery-title">
+  <header class="gallery-heading">
+    <p class="eyebrow">A COLLECTION OF LITTLE MOMENTS</p>
+    <h2 id="gallery-title">Our <em>memories</em></h2>
+    <p>Every chapter brought us closer to forever.</p>
+  </header>
+
+  <div class="gallery-grid">
+    @for (photo of photos; track photo.src; let index = $index) {
+      <button #galleryButton type="button" class="gallery-item" [class]="photo.layout"
+        (click)="open(index)" [attr.aria-label]="'Open photo: ' + photo.caption">
+        <img [src]="photo.src" [alt]="photo.alt" loading="lazy" decoding="async">
+        <span><small>{{ (index + 1).toString().padStart(2, '0') }}</small>{{ photo.caption }} <i aria-hidden="true">↗</i></span>
+      </button>
+    }
+  </div>
+
+  <p class="gallery-signoff"><span></span> six glimpses of our favorite story <span></span></p>
+</section>
+
+@if (activePhoto(); as photo) {
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" (click)="backdropClick($event)">
+    <button #closeButton type="button" class="lightbox-close" (click)="close()" aria-label="Close photo viewer">Close <span aria-hidden="true">×</span></button>
+    <button type="button" class="lightbox-arrow previous" (click)="previous()" aria-label="Previous photo">←</button>
+    <figure>
+      <img [src]="photo.src" [alt]="photo.alt">
+      <figcaption><span>{{ (activeIndex()! + 1).toString().padStart(2, '0') }} / {{ photos.length.toString().padStart(2, '0') }}</span>{{ photo.caption }}</figcaption>
+    </figure>
+    <button type="button" class="lightbox-arrow next" (click)="next()" aria-label="Next photo">→</button>
+  </div>
+}

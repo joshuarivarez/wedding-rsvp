@@ -1,0 +1,70 @@
+.guest-instructions {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-bottom: 19px;
+  padding: 13px 14px;
+  background: #f1eee6;
+  border-left: 2px solid var(--sage);
+}
+
+.guest-instructions > span {
+  display: grid;
+  flex: 0 0 22px;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: white;
+  background: var(--sage);
+  border-radius: 50%;
+  font-size: 10px;
+}
+
+.guest-instructions p {
+  margin: 0;
+  color: #74695d;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.guest-instructions strong {
+  display: block;
+  color: var(--mocha);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.guest-checklist label > span:nth-of-type(1) {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.guest-checklist label > span strong {
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+}
+
+.guest-checklist label > span small {
+  margin: 2px 0 0;
+  font-size: 9px;
+}
+
+.guest-checklist .guest-choice {
+  margin-left: auto;
+  color: #8a7f72;
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.guest-checklist label.checked .guest-choice {
+  color: #61704f;
+}
+
+@media (max-width: 380px) {
+  .guest-checklist .guest-choice {
+    display: none;
+  }
+}
