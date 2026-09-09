@@ -1,0 +1,19 @@
+@font-face {
+  font-family: 'Eyesome Script';
+  src: url('../public/assets/fonts/Eyesome Script.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Main section headings; role titles and other subheadings keep their serif. */
+main section h2 {
+  font-family: 'Eyesome Script', 'Cormorant Garamond', serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+main section h2 em {
+  font-style: normal;
+}

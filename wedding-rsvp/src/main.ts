@@ -1,3 +1,4 @@
+import { WeddingCountdown } from './wedding-countdown';
 import { Component, AfterViewInit, OnDestroy, signal } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { WeddingLogo } from './wedding-logo';
@@ -9,7 +10,7 @@ import { MockRsvpGateway, RSVP_GATEWAY } from './rsvp/rsvp.gateway';
 import { SheetsRsvpGateway } from './rsvp/sheets.gateway';
 import { SHEETS_WEB_APP_URL } from './rsvp/sheets.config';
 
-@Component({selector:'app-root',standalone:true,imports:[WeddingLogo, AutumnLeaves, ElegantAmpersand, GalleryComponent, RsvpComponent],templateUrl:'./app.html',styleUrl:'./sticky-header.css',styles: [':host { display: block; isolation: isolate; }']})
+@Component({selector:'app-root',standalone:true,imports:[WeddingCountdown, WeddingLogo, AutumnLeaves, ElegantAmpersand, GalleryComponent, RsvpComponent],templateUrl:'./app.html',styleUrls:['./sticky-header.css', './section-layout.css'],styles: [':host { display: block; isolation: isolate; }']})
 class App implements AfterViewInit, OnDestroy {
   menu = signal(false);
   observer?: IntersectionObserver;

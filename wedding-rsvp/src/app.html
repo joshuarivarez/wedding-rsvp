@@ -2,11 +2,18 @@
 <header class="header">
   <a href="#home" class="brand-link" aria-label="Joshua and Judy Ann home"><wedding-logo /></a>
   <button class="menu-toggle" (click)="menu.set(!menu())" [attr.aria-expanded]="menu()" aria-controls="navigation">{{ menu() ? 'Close ✕' : 'Menu ☰' }}</button>
-  <nav id="navigation" [class.open]="menu()" aria-label="Main navigation"><a href="#story" (click)="closeMenu()">Our story</a><a href="#gallery" (click)="closeMenu()">Gallery</a><a href="#details" (click)="closeMenu()">The day</a><a href="#notes" (click)="closeMenu()">Little details</a><a href="#rsvp" class="nav-rsvp" (click)="closeMenu()">Kindly RSVP <span>↗</span></a></nav>
+  <nav id="navigation" [class.open]="menu()" aria-label="Main navigation">
+    <a href="#story" (click)="closeMenu()">Our Story</a>
+    <a href="#gallery" (click)="closeMenu()">Our Memories</a>
+    <a href="#details" (click)="closeMenu()">Finer Details</a>
+    <a href="#notes" (click)="closeMenu()">Gentle Reminders</a>
+    <a href="#rsvp" class="nav-rsvp" (click)="closeMenu()">RSVP</a>
+    <a href="#entourage" (click)="closeMenu()">Entourage</a>
+  </nav>
 </header>
 <main>
 <section class="hero" id="home">
-  <div class="hero-copy"><div class="eyebrow"><span></span> TOGETHER IS A BEAUTIFUL PLACE TO BE</div><p class="intro">With full hearts, we invite you to celebrate</p><h1><span class="couple-name">Joshua <elegant-ampersand /></span><span class="couple-name">Judy Ann</span></h1><blockquote class="hero-verse"><p>“When the time is right,<br>I the Lord will make it happen”</p><cite>— Isaiah 60:22</cite></blockquote><div class="hero-date">MONDAY, FEBRUARY 08, 2027 <span>✦</span> 10 22 LIPA</div><p class="hero-location">4:00 PM · Alaminos Rd., Lipa City, Batangas</p><p class="hero-description">A little laughter, a few happy tears, and a lifetime of love.<br>Our next chapter begins with you by our side.</p><a href="#rsvp" class="button">Celebrate with us <span>↗</span></a><p class="deadline">We look forward to celebrating with you</p></div>
+  <div class="hero-copy"><div class="eyebrow"><span></span> TOGETHER IS A BEAUTIFUL PLACE TO BE</div><p class="intro">With full hearts, we invite you to celebrate</p><h1><span class="couple-name">Judy <elegant-ampersand /></span><span class="couple-name">Josh</span></h1><blockquote class="hero-verse"><p>“When the time is right,<br>I the Lord will make it happen”</p><cite>— Isaiah 60:22</cite></blockquote><wedding-countdown /><p class="hero-description">A little laughter, a few happy tears, and a lifetime of love.<br>Our next chapter begins with you by our side.</p></div>
   <div class="hero-art">
     <div class="hero-frame">
       <div class="hero-photo">
@@ -22,22 +29,160 @@
 <div class="date-ribbon"><span>A day for love.</span><span>A lifetime of us.</span><span>A celebration with you.</span><span class="ribbon-star">✳</span></div>
 <section class="story section reveal" id="story"><div class="story-image"><img loading="lazy" src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=85" alt="A couple sharing a quiet embrace"><span>and so, the adventure continues.</span></div><div class="story-copy"><p class="eyebrow">OUR STORY</p><h2>Some things are<br><em>meant to be.</em></h2><p>What started as a few chance encounters through mutual friends turned into a friendship built through simple chats and constant check-ins. As we got to know each other better, friendship blossomed into love. After a few dates, we officially became a couple on February 8, 2020.</p><p>On February 7, 2026, the proposal happened, making our journey even more special. Now, we are excited to begin our next chapter as we prepare to say “I do” on February 8, 2027—exactly seven years after our love story began.</p><div class="signature">From strangers, to friends, to forever. <span>♥</span></div></div></section>
 <wedding-gallery />
-<section class="day section reveal" id="details"><div class="section-heading"><p class="eyebrow">SAVE A LITTLE ROOM FOR MAGIC</p><h2>The <em>beautiful</em> day</h2><p>Monday, February 08, 2027 · 4:00 PM</p></div><div class="unplugged-notice"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="6" width="20" height="36" rx="3"></rect><path d="M20 10h8M21 37h6M8 8l32 32"></path></svg><div><p class="eyebrow">BE HERE WITH US</p><h3>An unplugged ceremony</h3><p>We kindly ask that phones and cameras remain silenced and tucked away during the ceremony. Please be fully present with us—our photographer will capture every special moment for everyone to enjoy.</p></div></div><div class="schedule"><article><span class="event-icon">♧</span><p class="eyebrow">THE DATE</p><h3>February 08, 2027</h3><p>Monday · 4:00 PM</p><p>A day for love,<br>and the beginning of forever.</p></article><article><span class="event-icon">♧</span><p class="eyebrow">THE VENUE</p><h3>10 22 Lipa</h3><p>Lipa City, Batangas</p><p>Our favorite people,<br>together in one special place.</p></article><article><span class="event-icon">✧</span><p class="eyebrow">FIND YOUR WAY</p><h3>See you in Lipa</h3><p>Alaminos Rd., Lipa City, Batangas</p><a class="text-button" href="https://maps.app.goo.gl/hEHciPn7qJmMpfPg9" target="_blank" rel="noopener noreferrer">View on Google Maps <span>↗</span></a></article></div><button class="text-button" (click)="calendar()">Add to your calendar <span>↗</span></button></section>
-<section class="notes section reveal" id="notes"><div><p class="eyebrow">A FEW THINGS TO KNOW</p><h2>It's all in the<br><em>little details.</em></h2><p>Come as you are, with a little extra sparkle.</p><div class="palette" aria-label="Wedding colors: taupe, terracotta, sage, camel, and mocha"><span style="--swatch:#b5a79a" title="Taupe"></span><span style="--swatch:#b86e54" title="Terracotta"></span><span style="--swatch:#9da58a" title="Sage"></span><span style="--swatch:#bd9366" title="Camel"></span><span style="--swatch:#705646" title="Mocha"></span></div><p class="palette-label">TAUPE · TERRACOTTA · SAGE · CAMEL · MOCHA</p></div><div class="faq"><details open><summary>What should I wear?<span>+</span></summary><p>
-  <b>Garden semi-formal.</b> Think light fabrics, earthy tones, and shoes that are happy on a garden path.
-  We encourage our guests to dress within our wedding color palette.<br><br>
-  We kindly ask our guests to <b>refrain from wearing white or champagne</b>, as these colors are reserved for the bride.
-</p></details><details><summary>Can I bring a plus-one?<span>+</span></summary><p>Please follow the guest list provided on your invitation. We’re keeping our celebration intimate and kindly ask that only the named guests attend.</p></details><details><summary>A note on gifts<span>+</span></summary><p>Your presence is our favorite present, and sharing this special day with you is more than enough. Should you wish to bless us with a gift, we would warmly appreciate a monetary gift in place of a physical one as we begin this new chapter together.</p></details><details><summary>Getting to the venue<span>+</span></summary><p>Join us at 10 22 Lipa, Alaminos Rd., Lipa City, Batangas. Our wedding ceremony begins at 4:00 PM. We would greatly appreciate your arrival by 3:30 PM, giving you plenty of time to settle in and get comfortable before the ceremony begins. <a class="text-button" href="https://www.google.com/maps/search/?api=1&amp;query=10%2022%20Lipa%2C%20Alaminos%20Rd.%2C%20Lipa%20City%2C%20Batangas" target="_blank" rel="noopener noreferrer">View on Google Maps ↗</a></p></details></div></section>
+<section class="day section reveal" id="details" aria-labelledby="details-heading">
+  <div class="section-heading"><p class="eyebrow">FEBRUARY 08, 2027</p><h2 id="details-heading">Finer <em>Details</em></h2><p>A day to celebrate, a lifetime to remember.</p></div>
+  <div class="event-details">
+    <article id="ceremony"><p class="eyebrow">THE PROMISE</p><h3>Ceremony</h3><p class="event-time">4:00 PM</p><p><strong>Juniper Hall, 10 22 Lipa</strong><br>Alaminos Rd., Lipa City, Batangas</p><a class="text-button" href="https://maps.app.goo.gl/hEHciPn7qJmMpfPg9" target="_blank" rel="noopener noreferrer">View on Google Maps</a></article>
+    <article id="reception"><p class="eyebrow">THE CELEBRATION</p><h3>Reception</h3><p class="event-time">6:30 PM</p><p><strong>Murraya Hall, 10 22 Lipa</strong><br>Alaminos Rd., Lipa City, Batangas</p></article>
+  </div>
+  <div class="wedding-timeline" id="timeline"><h3>Wedding Timeline</h3><ol><li><div class="timeline-event"><svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M10 54V24a22 22 0 0 1 44 0v30M17 54V24a15 15 0 0 1 30 0v30M6 54h15m22 0h15M17 33h30"/><path d="m27 42 5-5 5 5m-5-5v14"/></svg><div class="timeline-copy"><time datetime="2027-02-08T15:30:00+08:00">3:30 PM</time><strong>Guest arrival</strong><span class="timeline-place">Juniper Hall</span></div></div></li><li><div class="timeline-event"><svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle cx="23" cy="36" r="15"/><circle cx="23" cy="36" r="11"/><circle cx="43" cy="36" r="15"/><circle cx="43" cy="36" r="11"/><path d="m16 17-4-7 5-6h12l5 6-4 7m-18-7h22M17 4l6 13 6-13"/></svg><div class="timeline-copy"><time datetime="2027-02-08T16:00:00+08:00">4:00 PM</time><strong>Wedding ceremony</strong><span class="timeline-place">Juniper Hall</span></div></div></li><li><div class="timeline-event"><svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M14 7h20l-2 23a8 8 0 0 1-16 0L14 7Zm10 31v17m-8 2h16M15 19h18m11-7h14L47 34 36 12h8Zm3 22v21m-8 2h16m-7-45 5-9"/></svg><div class="timeline-copy"><time datetime="2027-02-08T18:00:00+08:00">6:00 PM</time><strong>Cocktails &amp; photos</strong></div></div></li><li><div class="timeline-event"><svg class="timeline-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M7 43a25 25 0 0 1 50 0H7Zm-2 5h54M14 54h36M29 16v-4h6v4M14 37a19 19 0 0 1 9-12"/></svg><div class="timeline-copy"><time datetime="2027-02-08T18:30:00+08:00">6:30 PM</time><strong>Wedding reception</strong><span class="timeline-place">Murraya Hall</span></div></div></li></ol><p class="pending-details">All times are Philippine time.</p></div>
+  <button class="text-button" (click)="calendar()">Add to your calendar <span aria-hidden="true">&nearr;</span></button>
+  <div class="dress-code" id="dress-code"><p class="eyebrow">DRESSED FOR A BEAUTIFUL DAY</p><h3>Dress Code</h3><div class="attire-grid"><article><h4>Principal Sponsors</h4><p><strong>Gentlemen:</strong> Black suit<br><strong>Ladies:</strong> Long gown or formal attire</p><ul class="attire-colors" aria-label="Suggested colors"><li><svg class="attire-leaf" style="--swatch:#aa624b;--leaf-angle:-32deg" viewBox="0 0 64 72" aria-hidden="true" focusable="false"><path fill="currentColor" d="M32 3 39 19 48 13 46 29 60 25 54 39 62 43 40 54 34 59 33 69 30 69 30 57 8 47 14 41 3 29 20 31 16 15 26 20Z"/><path d="M32 14V59M32 38 23 28M32 46 46 35M32 51 18 43" fill="none" stroke="#77503c" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round"/></svg>Terracotta</li><li><svg class="attire-leaf" style="--swatch:#795344;--leaf-angle:24deg" viewBox="0 0 64 72" aria-hidden="true" focusable="false"><path fill="currentColor" d="M32 3 39 19 48 13 46 29 60 25 54 39 62 43 40 54 34 59 33 69 30 69 30 57 8 47 14 41 3 29 20 31 16 15 26 20Z"/><path d="M32 14V59M32 38 23 28M32 46 46 35M32 51 18 43" fill="none" stroke="#77503c" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round"/></svg>Copper brown</li></ul></article><article><h4>Wedding Guests</h4><p><strong>Gentlemen:</strong> Suit or long- or short-sleeved polo<br><strong>Ladies:</strong> Long dress or gown</p><ul class="attire-colors" aria-label="Suggested colors"><li><svg class="attire-leaf" style="--swatch:#ad9c8d;--leaf-angle:38deg" viewBox="0 0 64 72" aria-hidden="true" focusable="false"><path fill="currentColor" d="M32 3 39 19 48 13 46 29 60 25 54 39 62 43 40 54 34 59 33 69 30 69 30 57 8 47 14 41 3 29 20 31 16 15 26 20Z"/><path d="M32 14V59M32 38 23 28M32 46 46 35M32 51 18 43" fill="none" stroke="#77503c" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round"/></svg>Taupe</li><li><svg class="attire-leaf" style="--swatch:#aa624b;--leaf-angle:-19deg" viewBox="0 0 64 72" aria-hidden="true" focusable="false"><path fill="currentColor" d="M32 3 39 19 48 13 46 29 60 25 54 39 62 43 40 54 34 59 33 69 30 69 30 57 8 47 14 41 3 29 20 31 16 15 26 20Z"/><path d="M32 14V59M32 38 23 28M32 46 46 35M32 51 18 43" fill="none" stroke="#77503c" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round"/></svg>Terracotta</li><li><svg class="attire-leaf" style="--swatch:#bb956c;--leaf-angle:67deg" viewBox="0 0 64 72" aria-hidden="true" focusable="false"><path fill="currentColor" d="M32 3 39 19 48 13 46 29 60 25 54 39 62 43 40 54 34 59 33 69 30 69 30 57 8 47 14 41 3 29 20 31 16 15 26 20Z"/><path d="M32 14V59M32 38 23 28M32 46 46 35M32 51 18 43" fill="none" stroke="#77503c" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round"/></svg>Camel</li><li><svg class="attire-leaf" style="--swatch:#8b957f;--leaf-angle:-48deg" viewBox="0 0 64 72" aria-hidden="true" focusable="false"><path fill="currentColor" d="M32 3 39 19 48 13 46 29 60 25 54 39 62 43 40 54 34 59 33 69 30 69 30 57 8 47 14 41 3 29 20 31 16 15 26 20Z"/><path d="M32 14V59M32 38 23 28M32 46 46 35M32 51 18 43" fill="none" stroke="#77503c" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round"/></svg>Sage</li></ul></article></div><p>Our celebration will be held in indoor, air-conditioned halls. Choose elegant, comfortable footwear. Please refrain from wearing white or champagne.</p></div>
+</section>
+<section class="section reminders reveal" id="notes" aria-labelledby="reminders-heading">
+  <div class="section-heading"><p class="eyebrow">WITH LOVE, A FEW LITTLE NOTES</p><h2 id="reminders-heading">Gentle <em>Reminders</em></h2></div>
+  
+  <div class="reminder-grid">
+    <article id="unplugged"><h3>Unplugged Ceremony</h3><p>We kindly ask that phones and cameras remain silenced and tucked away during the ceremony. Please be fully present with us; our photographer will capture every special moment for everyone to enjoy.</p></article>
+    <article id="arrival"><h3>Arrival</h3><p>Please arrive by <strong>3:30 PM</strong> so you have time to settle in before our ceremony begins at <strong>4:00 PM</strong>.</p><p>Join us at 10 22 Lipa, Alaminos Rd., Lipa City, Batangas.</p></article>
+    <article id="gifts"><h3>Gifts</h3><p>Your presence is our favorite present, and sharing this special day with you is more than enough. Should you wish to bless us with a gift, we would warmly appreciate a monetary gift in place of a physical one as we begin this new chapter together.</p></article>
+    <article class="faq" id="faqs"><h3>FAQs</h3><details><summary>Can I bring a plus-one?<span>+</span></summary><p>Please follow the guest list provided on your invitation. We're keeping our celebration intimate and kindly ask that only the named guests attend.</p></details><details><summary>How do I RSVP?<span>+</span></summary><p>Find your invitation in the RSVP section, choose your attendance, and select each named guest who will join us.</p></details></article>
+  </div>
+</section>
 <section class="rsvp-section" id="rsvp">
   <div class="rsvp-wrap reveal">
     <div class="rsvp-copy">
       <p class="eyebrow">WE'VE SAVED YOU A SEAT</p>
-      <h2>Will you<br>join <em>us?</em></h2>
+      <h2>Will you<br> join <em>us?</em></h2>
       <p>It wouldn’t be the same without you.<br>Find your invitation and let us know if you can make it.</p>
       <div class="rsvp-flower" aria-hidden="true">✳</div>
       <p class="small-note">A day to remember.<br>A memory to keep forever.</p>
     </div>
     <div class="form-card"><wedding-rsvp /></div>
   </div>
+</section>
+<section class="section entourage reveal" id="entourage" aria-labelledby="entourage-heading">
+  <img class="entourage-header-image" src="assets/entourage-header.JPEG" alt="Judy and Josh sitting together on a garden bench" width="1536" height="1136" loading="lazy" decoding="async">
+  <p class="eyebrow">BY OUR SIDE</p>
+  <h2 id="entourage-heading"><em>Our Entourage</em></h2>
+  <p>The people who will stand beside us on our special day.</p>
+  <div class="entourage-grid">
+    <article class="entourage-group">
+      <h3>Parents of the Groom</h3>
+      <ul>
+        <li>Mr. Edgardo M. Reyes</li>
+        <li>Mrs. Editha R. Reyes</li>
+      </ul>
+    </article>
+    <article class="entourage-group">
+      <h3>Parents of the Bride</h3>
+      <ul>
+        <li>Mr. Aniceto B. Del Mundo</li>
+        <li>Mrs. Remidios L. Del Mundo</li>
+      </ul>
+    </article>
+  </div>
+  <div class="principal-sponsors">
+    <article class="entourage-group">
+      <h3>Principal Sponsors</h3>
+      <ul class="sponsor-pairs">
+        <li class="sponsor-pair"><span>Engr. Marino Christopher Galagala</span><span>Mrs. Vanessa Galagala</span></li>
+        <li class="sponsor-pair"><span>Mr. Raymond Ferrer</span><span>Mrs. Khristine Ferrer</span></li>
+        <li class="sponsor-pair"><span>Dr. Francis Kayode Ashipaoloye</span><span>Mrs. Pamela Amor Borja</span></li>
+        <li class="sponsor-pair"><span>Mr. Dave Malijan</span><span>Mrs. Melanie Malijan</span></li>
+        <li class="sponsor-pair"><span>Mr. Felix Gonzales</span><span>Mrs. Marina Morales</span></li>
+        <li class="sponsor-pair"><span>Engr. Ronnie Limbo</span><span>Dr. Eulalia Limbo</span></li>
+        <li class="sponsor-pair"><span>Mr. Jose Lorenzo Samaniego</span><span>Mrs. Donna May Samaniego</span></li>
+        <li class="sponsor-pair"><span>Mr. Ricardo Baldo</span><span>Mrs. Marie Jane Baldo</span></li>
+        <li class="sponsor-pair"><span>Mr. Romulo Castillo</span><span>Mrs. Enriquita Castillo</span></li>
+        <li class="sponsor-pair"><span>Mr. Elton Rex Baldeo</span><span>Mrs. Hannah Baldeo</span></li>
+        <li class="sponsor-pair"><span>Mr. Dennis De Gorio</span><span>Ms. Airene Atienza</span></li>
+        <li class="sponsor-pair"><span>Mr. Jojo Sumugat</span><span>Mrs. Oleth Sumugat</span></li>
+      </ul>
+    </article>
+  </div>
+  <div class="entourage-grid party-members honor-pair">
+    <article class="entourage-group">
+      <h3>Best Men</h3>
+      <ul>
+        <li>Bryan Matias</li>
+        <li>Patrick Cervatos</li>
+      </ul>
+    </article>
+    <article class="entourage-group">
+      <h3>Maids of Honor</h3>
+      <ul>
+        <li>Diane Dangilan</li>
+        <li>Shaina Del Mundo</li>
+      </ul>
+    </article>
+  </div>
+  <div class="secondary-sponsors">
+    <h3>Secondary Sponsors</h3>
+    <div class="entourage-grid three-columns sponsor-columns">
+      <article class="entourage-group">
+        <h3>Candle</h3>
+        <ul>
+          <li class="sponsor-pair"><span>Jeric Del Mundo</span><span>Jocelyn Del Mundo</span></li>
+        </ul>
+      </article>
+      <article class="entourage-group">
+        <h3>Veil</h3>
+        <ul>
+          <li class="sponsor-pair"><span>Julius Del Mundo</span><span>Marianne Del Mundo</span></li>
+        </ul>
+      </article>
+      <article class="entourage-group">
+        <h3>Cord</h3>
+        <ul>
+          <li class="sponsor-pair"><span>Jovit Guirnaldo</span><span>Alyza Guirnaldo</span></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+  <div class="wedding-party-pairs entourage-group">
+    <div class="party-headings">
+      <h3>Groomsmen</h3>
+      <h3>Bridesmaids</h3>
+    </div>
+    <ul>
+      <li class="sponsor-pair"><span>Mark Angelo Reyes</span><span>Catherine Dacayana</span></li>
+      <li class="sponsor-pair"><span>Marvin Villamor</span><span>Princes Enriquez</span></li>
+      <li class="sponsor-pair"><span>Lorenzo Manglo</span><span>Renzel Dianne Manglo</span></li>
+      <li class="sponsor-pair"><span>Antonio Lago</span><span>Reneza Claire Buan</span></li>
+      <li class="sponsor-pair"><span>Eldrin Tabaldo</span><span>Rachelle Cay</span></li>
+      <li class="sponsor-pair"><span>Ivan Castro</span><span>Cristine Joy Capulong</span></li>
+      <li class="sponsor-pair"><span>Paolo Andre Pareno</span><span>Milka Grace Linatoc</span></li>
+    </ul>
+  </div>
+  <div class="entourage-grid bearer-grid">
+    <article class="entourage-group">
+      <h3>Bible Bearer</h3>
+      <ul>
+        <li>Aaron Kristoff Jimenea</li>
+      </ul>
+    </article>
+    <article class="entourage-group">
+      <h3>Coin Bearer</h3>
+      <ul>
+        <li>King Luhan Orlina</li>
+      </ul>
+    </article>
+    <article class="entourage-group">
+      <h3>Ring Bearer</h3>
+      <ul>
+        <li>Aya Lalin Agapito</li>
+      </ul>
+    </article>
+  </div>
+  <article class="entourage-group flower-girls">
+    <h3>Flower Girls</h3>
+    <ul>
+      <li>Yohanna Adelaide Ardales</li>
+      <li>Czarina Briel Reyes</li>
+      <li>Maria Finela Muntac</li>
+      <li>Vienne Izabelle Manglo</li>
+    </ul>
+  </article>
 </section>
 </main><footer><a href="#home" class="footer-logo" aria-label="Joshua and Judy Ann home"><wedding-logo /></a><a class="footer-names" href="#home">Joshua <elegant-ampersand /> Judy Ann</a><p>FEBRUARY 08, 2027 <span>·</span> WITH LOVE, ALWAYS</p><span class="footer-heart">♡</span></footer>

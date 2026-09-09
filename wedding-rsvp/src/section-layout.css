@@ -1,0 +1,528 @@
+.event-details,
+.reminder-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+}
+
+.event-details {
+  margin: 42px 0;
+}
+
+.event-details article {
+  padding: 28px;
+  background: #efeee3;
+}
+
+.event-details p,
+.reminder-grid p,
+.dress-code p,
+.entourage>p {
+  font-size: 12px;
+  color: #85766a;
+}
+
+.event-details .event-time {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 29px;
+  color: var(--terracotta);
+  margin-bottom: 12px;
+}
+
+.wedding-timeline {
+  margin: 46px auto 25px;
+  max-width: 650px;
+}
+
+.wedding-timeline ol {
+  list-style: none;
+  position: relative;
+  padding: 12px 0;
+  margin: 35px 0 28px;
+}
+
+.wedding-timeline ol::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--taupe);
+}
+
+.wedding-timeline li {
+  position: relative;
+  width: 50%;
+  margin-left: 50%;
+  padding: 15px 0 15px 28px;
+  min-height: 106px;
+}
+
+.wedding-timeline li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 22px;
+  height: 1px;
+  background: var(--taupe);
+}
+
+.wedding-timeline li:nth-child(even) {
+  margin-left: 0;
+  padding: 15px 28px 15px 0;
+}
+
+.wedding-timeline li:nth-child(even)::before {
+  left: auto;
+  right: 0;
+}
+
+.timeline-event {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+}
+
+.wedding-timeline li:nth-child(even) .timeline-event {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.timeline-icon {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: var(--mocha);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.timeline-copy {
+  min-width: 0;
+}
+
+.wedding-timeline time {
+  display: block;
+  color: var(--mocha);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.timeline-copy strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 1.8px;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.pending-details {
+  font-size: 11px;
+  color: #85766a;
+}
+
+.dress-code {
+  margin: 50px auto 0;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
+  max-width: 700px;
+}
+
+.dress-code .palette {
+  justify-content: center;
+}
+
+.dress-code .palette-label {
+  font-size: 8px;
+  letter-spacing: 1px;
+  margin-top: 16px;
+}
+
+.reminders .section-heading,
+.entourage {
+  text-align: center;
+}
+
+.reminder-grid {
+  margin-top: 42px;
+  gap: 38px 55px;
+}
+
+.reminder-grid article {
+  min-width: 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.reminder-grid h3 {
+  font-size: 30px;
+}
+
+.entourage {
+  max-width: 850px;
+}
+
+.timeline-place {
+  display: block;
+  margin-top: 5px;
+  font-size: 10px;
+  color: #85766a;
+}
+
+.attire-grid,
+.entourage-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.attire-grid {
+  margin: 28px 0;
+}
+
+.attire-grid h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 25px;
+  font-weight: 400;
+  margin: 0 0 14px;
+}
+
+.attire-colors {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  padding: 0;
+  font-size: 9px;
+}
+
+.attire-colors li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.attire-leaf {
+  display: block;
+  width: 40px;
+  height: 45px;
+  color: var(--swatch);
+  transform: rotate(var(--leaf-angle, 0deg));
+}
+
+.entourage-group {
+  padding: 14px 12px;
+  min-width: 0;
+}
+
+.entourage-group h3 {
+  font-size: 27px;
+  color: var(--terracotta);
+}
+
+.entourage-group ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+}
+
+.entourage-group li {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.35;
+  margin: 4px 0;
+  overflow-wrap: anywhere;
+}
+
+.entourage-group.entourage-children li {
+  font-size: 13px;
+}
+
+.principal-sponsors,
+.secondary-sponsors {
+  border-block: 1px solid var(--line);
+  margin: 12px 0;
+  padding: 10px 0;
+}
+
+.principal-sponsors .sponsor-pairs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.entourage-group .sponsor-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 20px;
+  margin: 0;
+  padding: 2px 0;
+  break-inside: avoid;
+}
+
+.sponsor-pair span {
+  display: block;
+}
+
+.party-headings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.party-headings h3 {
+  margin-bottom: 0;
+}
+
+.sponsor-columns .entourage-group {
+  padding-inline: 8px;
+}
+
+.secondary-sponsors>h3 {
+  margin-top: 10px;
+  color: var(--terracotta);
+}
+
+.three-columns {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.entourage .bearer-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 36px;
+  gap: 12px 16px;
+}
+
+.bearer-grid > .entourage-group:last-child {
+  grid-column: 1 / -1;
+  justify-self: center;
+}
+
+.flower-girls {
+  margin-top: 28px;
+}
+
+.flower-girls ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 16px;
+}
+
+.secondary-sponsors .sponsor-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+}
+
+.sponsor-columns > .entourage-group:last-child {
+  grid-column: 1 / -1;
+  width: calc((100% - 16px) / 2);
+  justify-self: center;
+}
+
+.sponsor-columns .sponsor-pair {
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+.entourage {
+  max-width: 1180px;
+}
+
+@media (min-width: 1001px) {
+  nav {
+    gap: 22px;
+  }
+}
+
+@media (max-width: 650px) {
+  .hero {
+    isolation: isolate;
+    overflow: hidden;
+    min-height: calc(100svh - 78px);
+    padding: 44px 25px 28px;
+    align-content: center;
+  }
+
+  .hero .hero-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    z-index: -2;
+    animation: none;
+  }
+
+  .hero .hero-frame,
+  .hero .hero-photo,
+  .hero .photo-arch {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero .photo-arch {
+    border-radius: 0;
+  }
+
+  .hero .photo-arch img {
+    object-fit: cover;
+    transform: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgb(246 243 237 / 70%), rgb(246 243 237 / 80%) 55%, rgb(246 243 237 / 94%));
+  }
+
+  .hero .photo-outline,
+  .hero .round-seal,
+  .hero .image-caption {
+    display: none;
+  }
+
+  .hero .hero-copy {
+    padding-top: 0;
+  }
+
+  .hero wedding-countdown {
+    margin-inline: auto;
+  }
+
+  .hero .hero-description,
+  .hero .deadline {
+    color: var(--mocha);
+  }
+
+  .hero .scroll-note {
+    margin-top: 0;
+  }
+
+  .event-details,
+  .reminder-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .event-details article {
+    padding: 24px 18px;
+  }
+
+  .wedding-timeline li {
+    padding-left: 14px;
+    min-height: 118px;
+  }
+
+  .wedding-timeline li:nth-child(even) {
+    padding-right: 14px;
+  }
+
+  .wedding-timeline li::before {
+    width: 10px;
+  }
+
+  .timeline-event {
+    gap: 7px;
+  }
+
+  .timeline-icon {
+    width: 32px;
+    height: 38px;
+  }
+
+  .wedding-timeline time {
+    font-size: 10px;
+    letter-spacing: .5px;
+  }
+
+  .timeline-copy strong {
+    font-size: 8px;
+    letter-spacing: .8px;
+  }
+
+  .timeline-place {
+    font-size: 9px;
+  }
+
+  .attire-grid,
+  .entourage-grid,
+  .principal-sponsors .sponsor-pairs {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .entourage-grid.party-members {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .entourage-grid.honor-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
+  }
+
+  .honor-pair h3 {
+    font-size: 22px;
+    line-height: 1.3;
+  }
+
+  .entourage-group {
+    padding: 0px 0;
+  }
+
+  .principal-sponsors .sponsor-pairs {
+    gap: 0;
+  }
+
+  .entourage-group .sponsor-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    font-size: 13px;
+  }
+
+  .sponsor-columns .sponsor-pair {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .entourage-group li {
+    font-size: 13px;
+  }
+
+  .entourage-group.entourage-children li {
+    font-size: 15px;
+  }
+
+  .party-headings {
+    gap: 16px;
+  }
+
+  .party-headings h3 {
+    font-size: 24px;
+  }
+}
+.entourage-header-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto 24px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 66.667%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 66.667%, transparent 100%);
+}
