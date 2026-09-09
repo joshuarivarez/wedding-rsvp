@@ -52,7 +52,7 @@ export class RsvpComponent implements OnDestroy {
     this.cancelAutocomplete();
     if (value.trim().length < 3) return;
     const request = this.autocompleteRequest;
-    this.autocompleteTimer = setTimeout(() => this.loadSuggestions(value.trim(), request), 180);
+    this.autocompleteTimer = setTimeout(() => this.loadSuggestions(value.trim(), request), 450);
   }
 
   searchFocused() {
