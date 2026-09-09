@@ -17,3 +17,15 @@ main section h2 {
 main section h2 em {
   font-style: normal;
 }
+
+.hero h1 {
+  color: var(--terracotta);
+  font-family: 'Eyesome Script', 'Cormorant Garamond', serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+.hero h1 elegant-ampersand {
+  color: var(--mocha);
+}

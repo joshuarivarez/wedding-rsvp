@@ -10,7 +10,7 @@
       <button #galleryButton type="button" class="gallery-item" [class]="photo.layout"
         (click)="open(index)" [attr.aria-label]="'Open photo: ' + photo.caption">
         <img [src]="photo.src" [alt]="photo.alt" loading="lazy" decoding="async">
-        <span><small>{{ (index + 1).toString().padStart(2, '0') }}</small>{{ photo.caption }} <i aria-hidden="true">↗</i></span>
+        <span><small>{{ (index + 1).toString().padStart(2, '0') }}</small>{{ photo.caption }} <i aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></i></span>
       </button>
     }
   </div>
@@ -20,12 +20,12 @@
 
 @if (activePhoto(); as photo) {
   <div class="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" (click)="backdropClick($event)">
-    <button #closeButton type="button" class="lightbox-close" (click)="close()" aria-label="Close photo viewer">Close <span aria-hidden="true">×</span></button>
-    <button type="button" class="lightbox-arrow previous" (click)="previous()" aria-label="Previous photo">←</button>
+    <button #closeButton type="button" class="lightbox-close" (click)="close()" aria-label="Close photo viewer">Close <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18"/></svg></span></button>
+    <button type="button" class="lightbox-arrow previous" (click)="previous()" aria-label="Previous photo"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4m6-6-6 6 6 6"/></svg></button>
     <figure>
       <img [src]="photo.src" [alt]="photo.alt">
       <figcaption><span>{{ (activeIndex()! + 1).toString().padStart(2, '0') }} / {{ photos.length.toString().padStart(2, '0') }}</span>{{ photo.caption }}</figcaption>
     </figure>
-    <button type="button" class="lightbox-arrow next" (click)="next()" aria-label="Next photo">→</button>
+    <button type="button" class="lightbox-arrow next" (click)="next()" aria-label="Next photo"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
   </div>
 }

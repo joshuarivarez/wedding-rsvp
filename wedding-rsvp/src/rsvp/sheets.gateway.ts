@@ -1,4 +1,7 @@
 import { Invitation, RsvpGateway, RsvpReceipt, RsvpResponse } from './rsvp.models';
+import { signal } from '@angular/core';
+
+export const pendingSheetsRequests = signal(0);
 
 class SheetsConnectionError extends Error {}
 
@@ -30,6 +33,15 @@ export class SheetsRsvpGateway implements RsvpGateway {
   }
 
   async findInvitations(name: string): Promise<Invitation[]> {
+    pendingSheetsRequests.update(count => count + 1);
+    try {
+      return await this.lookup(name);
+    } finally {
+      pendingSheetsRequests.update(count => count - 1);
+    }
+  }
+
+  private async lookup(name: string): Promise<Invitation[]> {
     try {
       return await this.request<Invitation[]>({ action: 'search', name });
     } catch (error) {
@@ -41,7 +53,12 @@ export class SheetsRsvpGateway implements RsvpGateway {
     }
   }
 
-  submit(response: RsvpResponse): Promise<RsvpReceipt> {
-    return this.request({ action: 'submit', response });
+  async submit(response: RsvpResponse): Promise<RsvpReceipt> {
+    pendingSheetsRequests.update(count => count + 1);
+    try {
+      return await this.request<RsvpReceipt>({ action: 'submit', response });
+    } finally {
+      pendingSheetsRequests.update(count => count - 1);
+    }
   }
 }

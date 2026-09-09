@@ -1,9 +1,15 @@
 <div class="invitation-rsvp" [attr.aria-busy]="busy()">
+  @if (isMock && (busy() || autocompleteBusy())) {
+    <div class="rsvp-loading" role="status">
+      <img class="loader-image" src="assets/loader.gif" alt="" width="72" height="72">
+      <span>{{ busy() && step() === 4 ? 'Saving your RSVP…' : 'Finding your invitation…' }}</span>
+    </div>
+  }
   @if (step() < 5) {
     <ol class="rsvp-progress" aria-label="RSVP progress">
       @for (label of steps; track $index) {
         <li [class.current]="step() === $index + 1" [class.complete]="step() > $index + 1" [attr.aria-current]="step() === $index + 1 ? 'step' : null">
-          <span>{{ step() > $index + 1 ? '✓' : $index + 1 }}</span>{{ label }}
+          <span>@if (step() > $index + 1) { <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12 4 4L19 6"/></svg> } @else { {{ $index + 1 }} }</span>{{ label }}
         </li>
       }
     </ol>
@@ -17,7 +23,7 @@
       <form (ngSubmit)="search()">
         <label for="invitation-search">Name on your invitation</label>
         <div class="search-field">
-          <span aria-hidden="true">⌕</span>
+          <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm5 12 6 6"/></svg></span>
           <input id="invitation-search" name="query" [ngModel]="query" (ngModelChange)="queryChanged($event)"
             (focus)="searchFocused()" (blur)="searchBlurred()" (keydown)="searchKeydown($event)"
             [disabled]="busy()" maxlength="120" autocomplete="off" placeholder="Search your name…"
@@ -32,14 +38,14 @@
                   [class.active]="activeSuggestion() === index" [attr.aria-selected]="activeSuggestion() === index"
                   (mouseenter)="activeSuggestion.set(index)" (mousedown)="$event.preventDefault(); selectSuggestion(suggestion)">
                   <span><strong>{{ suggestion.label }}</strong><small>{{ suggestion.guests.length }} {{ suggestion.guests.length === 1 ? 'guest' : 'guests' }} invited</small></span>
-                  <span aria-hidden="true">→</span>
+                  <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span>
                 </div>
               }
             </div>
           }
         </div>
         <p id="search-help" class="field-hint">You can search using the name of any guest on your invitation.</p>
-        <button class="button submit" type="submit" [disabled]="busy()">{{ busy() ? 'Finding your invitation…' : 'Find invitation' }}<span aria-hidden="true">↗</span></button>
+        <button class="button submit" type="submit" [disabled]="busy()">{{ busy() ? 'Finding your invitation…' : 'Find invitation' }}<span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button>
       </form>
       @if (searched() && matches().length === 0) {
         <div class="lookup-note" role="status"><strong>We couldn’t find your invitation.</strong><p>Try your full name or another name on your invitation. If you’re still having trouble, please contact Joshua or Judy Ann.</p></div>
@@ -47,7 +53,7 @@
       @if (matches().length > 1) {
         <div class="lookup-results"><p role="status">We found {{ matches().length }} invitations. Choose yours:</p>
           @for (match of matches(); track match.id) {
-            <button type="button" class="invitation-match" (click)="chooseInvitation(match)"><span><strong>{{ match.label }}</strong><small>{{ match.guests.length }} {{ match.guests.length === 1 ? 'guest' : 'guests' }} invited</small></span><span aria-hidden="true">→</span></button>
+            <button type="button" class="invitation-match" (click)="chooseInvitation(match)"><span><strong>{{ match.label }}</strong><small>{{ match.guests.length }} {{ match.guests.length === 1 ? 'guest' : 'guests' }} invited</small></span><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></button>
           }
         </div>
       }
@@ -61,9 +67,9 @@
         <p class="eyebrow">A PLACE JUST FOR YOU</p>
         <h3 #stepHeading tabindex="-1">Is this your invitation?</h3>
         <p class="step-description">We found your invitation:</p>
-        <div class="invitation-card"><span class="invitation-heart" aria-hidden="true">♡</span><h4>{{ invitation.label }}</h4><p>Your invitation is reserved for<br><strong>{{ invitation.guests.length }} {{ invitation.guests.length === 1 ? 'guest' : 'guests' }}.</strong></p><div class="invited-names">@for (guest of invitation.guests; track guest.id) {<span>{{ guest.name }}</span>}</div></div>
-        <button class="button submit" (click)="confirmIdentity()">{{ invitation.guests.length === 1 ? 'Yes, that’s me' : 'Yes, that’s us' }}<span aria-hidden="true">↗</span></button>
-        <button class="back-button" (click)="findAgain()">← Search for a different invitation</button>
+        <div class="invitation-card"><span class="invitation-heart" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span><h4>{{ invitation.label }}</h4><p>Your invitation is reserved for<br><strong>{{ invitation.guests.length }} {{ invitation.guests.length === 1 ? 'guest' : 'guests' }}.</strong></p><div class="invited-names">@for (guest of invitation.guests; track guest.id) {<span>{{ guest.name }}</span>}</div></div>
+        <button class="button submit" (click)="confirmIdentity()">{{ invitation.guests.length === 1 ? 'Yes, that’s me' : 'Yes, that’s us' }}<span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button>
+        <button class="back-button" (click)="findAgain()"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4m6-6-6 6 6 6"/></svg> Search for a different invitation</button>
       </div>
     }
 
@@ -74,12 +80,12 @@
         <p class="step-description">We would love to celebrate with you.</p>
         <form (ngSubmit)="continueAttendance()">
           <fieldset class="attendance-options"><legend>Your attendance</legend>
-            <label [class.selected]="attendance === 'accepts'"><input type="radio" name="attendance" value="accepts" [(ngModel)]="attendance" (ngModelChange)="error.set('')"><span><strong>Joyfully accepts</strong><small>Let’s make a beautiful memory.</small></span><span class="choice-icon" aria-hidden="true">♡</span></label>
+            <label [class.selected]="attendance === 'accepts'"><input type="radio" name="attendance" value="accepts" [(ngModel)]="attendance" (ngModelChange)="error.set('')"><span><strong>Joyfully accepts</strong><small>Let’s make a beautiful memory.</small></span><span class="choice-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span></label>
             <label [class.selected]="attendance === 'declines'"><input type="radio" name="attendance" value="declines" [(ngModel)]="attendance" (ngModelChange)="error.set('')"><span><strong>Regretfully declines</strong><small>Sending our love from afar.</small></span></label>
           </fieldset>
-          <button class="button submit" type="submit">Continue<span aria-hidden="true">↗</span></button>
+          <button class="button submit" type="submit">Continue<span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button>
         </form>
-        <button class="back-button" (click)="back()">← Back to invitation</button>
+        <button class="back-button" (click)="back()"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4m6-6-6 6 6 6"/></svg> Back to invitation</button>
       </div>
     }
 
@@ -92,7 +98,7 @@
           <fieldset [disabled]="busy()" class="final-fields">
             @if (attendance === 'accepts') {
               <div class="guest-instructions" id="guest-selection-instructions">
-                <span aria-hidden="true">✓</span>
+                <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12 4 4L19 6"/></svg></span>
                 <p><strong>Who will be attending?</strong> Check every invited person who can join us. Uncheck any family member or additional guest who cannot attend.</p>
               </div>
               <fieldset class="guest-checklist" aria-describedby="guest-selection-instructions"><legend>Guests on your invitation</legend>
@@ -103,26 +109,26 @@
               <p class="guest-count" aria-live="polite">{{ selectedIds().length }} of {{ invitation.guests.length }} reserved {{ invitation.guests.length === 1 ? 'seat' : 'seats' }} confirmed</p>
               <p class="field-hint">Only the named guests above are included in this invitation. You can change each checkbox before confirming.</p>
             } @else {
-              <div class="decline-summary"><span aria-hidden="true">♡</span> Regretfully declines · No guests attending</div>
+              <div class="decline-summary"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span> Regretfully declines · No guests attending</div>
             }
             <label for="couple-message">A short message for the couple <small>(optional)</small></label><textarea id="couple-message" name="message" [(ngModel)]="message" rows="3" maxlength="1000" placeholder="Leave a little love for Joshua & Judy Ann…"></textarea>
-            <button class="button submit" type="submit" [disabled]="busy()">{{ busy() ? 'Confirming your RSVP…' : 'Confirm RSVP' }}<span aria-hidden="true">↗</span></button>
+            <button class="button submit" type="submit" [disabled]="busy()">{{ busy() ? 'Confirming your RSVP…' : 'Confirm RSVP' }}<span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button>
           </fieldset>
         </form>
-        <button class="back-button" (click)="back()" [disabled]="busy()">← Back to attendance</button>
+        <button class="back-button" (click)="back()" [disabled]="busy()"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4m6-6-6 6 6 6"/></svg> Back to attendance</button>
       </div>
     }
 
     @if (step() === 5 && receipt(); as receipt) {
       <div class="rsvp-confirmation step-panel" role="status">
-        <span class="confirmation-icon" aria-hidden="true">💍</span>
+        <span class="confirmation-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 8a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM8 3l2-2h4l2 2-4 5-4-5Zm0 0h8"/></svg></span>
         <p class="eyebrow">{{ receipt.mode === 'mock' ? 'PREVIEW RSVP SAVED' : 'RSVP CONFIRMED' }}</p>
         <h3 #stepHeading tabindex="-1">Thank you, {{ invitation.greeting }}!</h3>
         <p>{{ receipt.mode === 'mock' ? 'Your RSVP has been saved for this preview.' : 'Your RSVP has been received.' }}</p>
         <p>{{ attendance === 'accepts' ? 'We can’t wait to celebrate with you!' : 'We’ll miss you and will be thinking of you on our special day.' }}</p>
         <div class="confirmation-summary"><strong>{{ attendance === 'accepts' ? 'Joyfully accepts' : 'Regretfully declines' }}</strong><span>{{ attendance === 'accepts' ? selectedIds().length : 0 }} {{ attendance === 'accepts' && selectedIds().length === 1 ? 'guest' : 'guests' }} attending</span></div>
         @if (receipt.mode === 'mock') {<p class="preview-notice">This is a mock RSVP, saved only in this browser. Nothing has been sent to the couple.</p>}
-        <button class="button submit" (click)="edit()">Edit RSVP<span aria-hidden="true">↗</span></button>
+        <button class="button submit" (click)="edit()">Edit RSVP<span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button>
         <button class="back-button" (click)="findAgain()">Find another invitation</button>
       </div>
     }

@@ -5,7 +5,14 @@ const vm = require('node:vm');
 const ts = require('typescript');
 
 function gateway(fetch) {
-  const context = vm.createContext({ exports: {}, fetch, AbortSignal, setTimeout: fn => fn() });
+  const context = vm.createContext({ exports: {}, fetch, AbortSignal, setTimeout: fn => fn(), require: () => ({
+    signal: initial => {
+      let value = initial;
+      const read = () => value;
+      read.update = fn => { value = fn(value); };
+      return read;
+    },
+  }) });
   const source = ts.transpileModule(fs.readFileSync('src/rsvp/sheets.gateway.ts', 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText;

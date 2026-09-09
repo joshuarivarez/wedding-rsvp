@@ -7,11 +7,12 @@ import { ElegantAmpersand } from './elegant-ampersand';
 import { RsvpComponent } from './rsvp/rsvp.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { MockRsvpGateway, RSVP_GATEWAY } from './rsvp/rsvp.gateway';
-import { SheetsRsvpGateway } from './rsvp/sheets.gateway';
+import { SheetsRsvpGateway, pendingSheetsRequests } from './rsvp/sheets.gateway';
 import { SHEETS_WEB_APP_URL } from './rsvp/sheets.config';
 
 @Component({selector:'app-root',standalone:true,imports:[WeddingCountdown, WeddingLogo, AutumnLeaves, ElegantAmpersand, GalleryComponent, RsvpComponent],templateUrl:'./app.html',styleUrls:['./sticky-header.css', './section-layout.css'],styles: [':host { display: block; isolation: isolate; }']})
 class App implements AfterViewInit, OnDestroy {
+  readonly pendingSheetsRequests = pendingSheetsRequests;
   menu = signal(false);
   observer?: IntersectionObserver;
   closeMenu() { this.menu.set(false); }
