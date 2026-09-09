@@ -18,7 +18,7 @@ After changing `angular.json` asset settings, restart the preview. If the upload
 ## Personalize
 
 - Edit names, date, venue, story, and FAQs in `src/app.html`.
-- Edit fictional sample invitations in `src/rsvp/mock-invitations.ts`. Keep real guest records on your future API.
+- Edit fictional sample invitations in `src/rsvp/mock-invitations.ts`, or follow [Google Sheets setup](google-apps-script/README.md) to load real invitations and save attendance using Apps Script.
 - Update the calendar event in `src/main.ts` with the actual venue and UTC times.
 - Change palette tokens in `src/styles.css`.
 - Replace the remote Unsplash images and Google Fonts with your own assets if desired.
@@ -26,7 +26,7 @@ After changing `angular.json` asset settings, restart the preview. If the upload
 
 ## RSVP behavior
 
-The RSVP follows four steps: find an invitation, confirm the household, choose attendance, and confirm the named guests. The checklist only includes invited guests; there is no custom name or plus-one field. Dietary restrictions, food allergies, a song request, and a message are optional. Declines save zero attendees and skip food/song fields.
+The RSVP follows four steps: find an invitation, confirm the household, choose attendance, and confirm the named guests. The checklist only includes invited guests; there is no custom name or plus-one field. A message is optional. Declines save zero attendees.
 
 Try **Juan & Maria Dela Cruz** (2 guests), **Sofia Reyes** (1 guest), or **The Santos Family** (3 guests). Searching **Juan** demonstrates multiple matching invitations. All are fictional mock records. Responses are saved per invitation in browser storage, edits replace the prior response, and confirmation clearly states that nothing has been sent.
 

@@ -6,6 +6,8 @@ import { ElegantAmpersand } from './elegant-ampersand';
 import { RsvpComponent } from './rsvp/rsvp.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { MockRsvpGateway, RSVP_GATEWAY } from './rsvp/rsvp.gateway';
+import { SheetsRsvpGateway } from './rsvp/sheets.gateway';
+import { SHEETS_WEB_APP_URL } from './rsvp/sheets.config';
 
 @Component({selector:'app-root',standalone:true,imports:[WeddingLogo, AutumnLeaves, ElegantAmpersand, GalleryComponent, RsvpComponent],templateUrl:'./app.html',styleUrl:'./sticky-header.css',styles: [':host { display: block; isolation: isolate; }']})
 class App implements AfterViewInit, OnDestroy {
@@ -32,5 +34,6 @@ class App implements AfterViewInit, OnDestroy {
   }
 }
 bootstrapApplication(App, {
-  providers: [{ provide: RSVP_GATEWAY, useClass: MockRsvpGateway }],
+  providers: [{ provide: RSVP_GATEWAY, useFactory: () => SHEETS_WEB_APP_URL
+    ? new SheetsRsvpGateway(SHEETS_WEB_APP_URL) : new MockRsvpGateway() }],
 }).catch(console.error);

@@ -41,8 +41,8 @@ export class MockRsvpGateway implements RsvpGateway {
     if (response.attendance === 'declines' && response.guestIds.length) {
       throw new Error('A declined invitation cannot include attending guests.');
     }
-    for (const [field, limit] of [['dietary', 500], ['allergies', 500], ['song', 150], ['message', 1000]] as const) {
-      if (typeof response[field] !== 'string' || response[field].length > limit) {
+    for (const [field, limit] of [['message', 1000]] as const) {
+      if (response[field] !== undefined && (typeof response[field] !== 'string' || response[field]!.length > limit)) {
         throw new Error('Please shorten your notes before confirming.');
       }
     }

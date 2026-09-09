@@ -17,10 +17,7 @@ export interface RsvpResponse {
   invitationId: string;
   attendance: Attendance;
   guestIds: string[];
-  dietary: string;
-  allergies: string;
-  song: string;
-  message: string;
+  message?: string;
 }
 
 export interface RsvpReceipt {

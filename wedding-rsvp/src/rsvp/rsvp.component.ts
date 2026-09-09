@@ -29,9 +29,6 @@ export class RsvpComponent implements OnDestroy {
   readonly steps = ['Find', 'Invitation', 'Attendance', 'Guests'];
   query = '';
   attendance: Attendance | '' = '';
-  dietary = '';
-  allergies = '';
-  song = '';
   message = '';
   private autocompleteTimer?: ReturnType<typeof setTimeout>;
   private autocompleteRequest = 0;
@@ -146,7 +143,7 @@ export class RsvpComponent implements OnDestroy {
     this.invitation.set(invitation);
     this.selectedIds.set(invitation.guests.map(guest => guest.id));
     this.attendance = '';
-    this.dietary = this.allergies = this.song = this.message = '';
+    this.message = '';
     this.receipt.set(null);
     this.goTo(2);
   }
@@ -205,9 +202,6 @@ export class RsvpComponent implements OnDestroy {
         invitationId: invitation.id,
         attendance: this.attendance,
         guestIds: this.attendance === 'accepts' ? this.selectedIds() : [],
-        dietary: this.attendance === 'accepts' ? this.dietary.trim() : '',
-        allergies: this.attendance === 'accepts' ? this.allergies.trim() : '',
-        song: this.attendance === 'accepts' ? this.song.trim() : '',
         message: this.message.trim(),
       });
       this.receipt.set(receipt);
