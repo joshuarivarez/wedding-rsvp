@@ -18,14 +18,14 @@ export class GalleryComponent implements OnDestroy {
   @ViewChild('closeButton') private closeButton?: ElementRef<HTMLButtonElement>;
 
   readonly photos: readonly GalleryPhoto[] = [
-    { src: '/assets/gallery-images/moment-to-remember.JPG', alt: 'A favorite moment from our photo collection', caption: 'A moment to remember', layout: 'wide' },
-    { src: '/assets/gallery-images/6R2.JPG', alt: 'A favorite moment from our photo collection', caption: 'Together, always', layout: 'tall' },
-    { src: '/assets/gallery-images/little-things.JPG', alt: 'A favorite moment from our photo collection', caption: 'The little things', layout: 'standard' },
-    { src: '/assets/gallery-images/hk.JPEG', alt: 'A favorite moment from our photo collection', caption: 'Our forever, our fairytale', layout: 'standard' },
-    { src: '/assets/gallery-images/favorite-memories.jpg', alt: 'A favorite moment from our photo collection', caption: 'A wish for a lifetime of us', layout: 'tall' },
-    { src: '/assets/gallery-images/treasure.jpg', alt: 'A favorite moment from our photo collection', caption: 'A lifetime of smiles and laughter', layout: 'wide' },
-    { src: '/assets/gallery-images/beginning.jpg', alt: 'A favorite moment from our photo collection', caption: 'The beginning of forever', layout: 'tall' },
-        { src: '/assets/gallery-images/5yrs.jpg', alt: 'A favorite moment from our photo collection', caption: 'A love that grows with every chapter', layout: 'wide' },
+    { src: 'assets/gallery-images/moment-to-remember.JPG', alt: 'A favorite moment from our photo collection', caption: 'A moment to remember', layout: 'wide' },
+    { src: 'assets/gallery-images/6R2.JPG', alt: 'A favorite moment from our photo collection', caption: 'Together, always', layout: 'tall' },
+    { src: 'assets/gallery-images/little-things.JPG', alt: 'A favorite moment from our photo collection', caption: 'The little things', layout: 'standard' },
+    { src: 'assets/gallery-images/hk.JPEG', alt: 'A favorite moment from our photo collection', caption: 'Our forever, our fairytale', layout: 'standard' },
+    { src: 'assets/gallery-images/favorite-memories.jpg', alt: 'A favorite moment from our photo collection', caption: 'A wish for a lifetime of us', layout: 'tall' },
+    { src: 'assets/gallery-images/treasure.jpg', alt: 'A favorite moment from our photo collection', caption: 'A lifetime of smiles and laughter', layout: 'wide' },
+    { src: 'assets/gallery-images/beginning.jpg', alt: 'A favorite moment from our photo collection', caption: 'The beginning of forever', layout: 'tall' },
+    { src: 'assets/gallery-images/5yrs.jpg', alt: 'A favorite moment from our photo collection', caption: 'A love that grows with every chapter', layout: 'wide' },
   ];
 
   readonly activeIndex = signal<number | null>(null);
