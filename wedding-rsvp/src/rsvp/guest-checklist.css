@@ -82,9 +82,19 @@
   cursor: pointer;
 }
 
+.plus-one-list input[type="checkbox"] {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--sage);
+}
+
 .plus-one-list label span {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   gap: 2px;
 }
 

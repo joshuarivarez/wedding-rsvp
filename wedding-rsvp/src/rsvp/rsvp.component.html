@@ -99,7 +99,7 @@
             @if (attendance === 'accepts') {
               <div class="guest-instructions" id="guest-selection-instructions">
                 <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12 4 4L19 6"/></svg></span>
-                <p><strong>Who will be attending?</strong> Check each invited person who can join us. Eligible guests can also select “Have +1.”</p>
+                <p><strong>Who will be attending?</strong> Check each invited person who can join us.</p>
               </div>
               <fieldset class="guest-checklist" aria-describedby="guest-selection-instructions"><legend>Guests on your invitation</legend>
                 @for (guest of invitation.guests; track guest.id) {
@@ -110,13 +110,14 @@
                 <fieldset class="plus-one-list"><legend>Additional guests</legend>
                   @for (guest of invitation.guests; track guest.id) {
                     @if (guest.havePlusOne) {
-                      <label [class.unavailable]="!selectedIds().includes(guest.id)"><input type="checkbox" [checked]="plusOneIds().includes(guest.id)" [disabled]="!selectedIds().includes(guest.id)" (change)="togglePlusOne(guest.id, $event)"><span><strong>{{ guest.name }}</strong><small>Have +1</small></span></label>
+                      <label [class.unavailable]="!selectedIds().includes(guest.id)"><input type="checkbox" [checked]="plusOneIds().includes(guest.id)" [disabled]="!selectedIds().includes(guest.id)" (change)="togglePlusOne(guest.id, $event)"><span><strong>Have + 1</strong></span></label>
                     }
                   }
                 </fieldset>
               }
+              @if (plusOneIds().length) {<p class="field-hint">Please include your +1's name in the message below.</p>}
               <p class="guest-count" aria-live="polite">{{ selectedIds().length + plusOneIds().length }} total {{ selectedIds().length + plusOneIds().length === 1 ? 'seat' : 'seats' }} confirmed ({{ selectedIds().length }} invited, {{ plusOneIds().length }} plus-one)</p>
-              <p class="field-hint">Only invited guests and eligible plus-ones can be included. You can change each checkbox before confirming.</p>
+              <p class="field-hint">Only invited guests can be included. You can change each checkbox before confirming.</p>
             } @else {
               <div class="decline-summary"><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span> Regretfully declines · No guests attending</div>
             }

@@ -14,6 +14,7 @@ async function accept(page: Page, name?: string) {
   await page.getByRole('button', { name: /Yes, that’s/ }).click();
   await page.getByRole('radio', { name: /Joyfully accepts/ }).check();
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
+  await page.locator('.guest-checklist input[type="checkbox"]').first().check();
 }
 
 test('search validates input, handles unknown names, and disambiguates matches', async ({ page }) => {
@@ -44,10 +45,11 @@ test('requires identity and attendance, saves only listed guests with optional d
   await expect(page.getByRole('alert')).toContainText('whether you can join');
   await page.getByRole('radio', { name: /Joyfully accepts/ }).check();
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
-  await expect(page.getByRole('checkbox')).toHaveCount(2);
-  await expect(page.locator('.guest-instructions')).toContainText('Uncheck any family member or additional guest who cannot attend');
+  await expect(page.locator('.guest-checklist input[type="checkbox"]')).toHaveCount(2);
+  await expect(page.locator('.guest-checklist input[type="checkbox"]:checked')).toHaveCount(0);
+  await expect(page.locator('.guest-instructions')).toContainText('Check each invited person');
   await expect(page.locator('.guest-checklist')).toContainText('Spouse');
-  await page.getByRole('checkbox', { name: /Maria Dela Cruz/ }).uncheck();
+  await page.getByRole('checkbox', { name: /Juan Dela Cruz/ }).check();
   await expect(page.getByRole('checkbox', { name: /Maria Dela Cruz/ }).locator('xpath=..')).toContainText('Not attending');
   await page.getByLabel('A short message for the couple').fill('So happy for you both!');
   await page.getByRole('button', { name: 'Confirm RSVP', exact: true }).click();
@@ -62,7 +64,7 @@ test('requires identity and attendance, saves only listed guests with optional d
 
 test('accepting requires at least one named guest; edits replace the same response', async ({ page }) => {
   await accept(page);
-  for (const checkbox of await page.getByRole('checkbox').all()) await checkbox.uncheck();
+  for (const checkbox of await page.locator('.guest-checklist input[type="checkbox"]').all()) await checkbox.uncheck();
   await page.getByRole('button', { name: 'Confirm RSVP', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('at least one guest');
   expect(await page.evaluate(key => localStorage.getItem(key), storageKey)).toBeNull();

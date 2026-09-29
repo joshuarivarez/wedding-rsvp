@@ -1,7 +1,7 @@
 // Set SPREADSHEET_ID in Project Settings > Script properties.
 // Guests headers (in this order):
-// invitationId,label,greeting,guestId,name,relationship,attending,message,updatedAt,havePlusOne,bringingPlusOne
-var SCRIPT_VERSION = 'rsvp-11-columns-v3';
+// invitationId,label,greeting,guestId,name,havePlusOne,relationship,attending,message,updatedAt
+var SCRIPT_VERSION = 'rsvp-10-columns-v5';
 
 function doPost(e) {
   var lock;
@@ -39,28 +39,23 @@ function doPost(e) {
     if (!sheet) throw setupError_('Missing sheet tab named Guests. Rename the guest list tab to Guests.');
     stage = 'read-sheet';
     var lastRow = sheet.getLastRow();
-    var rows = lastRow ? sheet.getRange(1, 1, lastRow, 6).getDisplayValues() : [];
-    var headers = ['invitationId','label','greeting','guestId','name','relationship',
-      'attending','message','updatedAt'];
-    var responseHeaders = sheet.getRange(1, 7, 1, 3).getDisplayValues()[0];
-    var plusOneHeaders = sheet.getRange(1, 10, 1, 2).getDisplayValues()[0];
-    if (!rows.length || !headers.slice(0, 6).every(function(h, i) { return (rows[0][i] || '').trim() === h; }) ||
-        !headers.slice(6).every(function(h, i) { return (responseHeaders[i] || '').trim() === h; }) ||
-        plusOneHeaders[0] !== 'havePlusOne' || plusOneHeaders[1] !== 'bringingPlusOne') {
-      throw setupError_('Guest sheet headers must match the setup guide in cells A1:K1, one header per column.');
+    var rows = lastRow ? sheet.getRange(1, 1, lastRow, 7).getDisplayValues() : [];
+    var headers = ['invitationId','label','greeting','guestId','name','havePlusOne',
+      'relationship','attending','message','updatedAt'];
+    var sheetHeaders = sheet.getRange(1, 1, 1, headers.length).getDisplayValues()[0];
+    if (!rows.length || !headers.every(function(h, i) { return (sheetHeaders[i] || '').trim() === h; })) {
+      throw setupError_('Guest sheet headers must match the setup guide in cells A1:J1, one header per column.');
     }
-    var plusOneRows = lastRow > 1 ? sheet.getRange(2, 10, lastRow - 1, 1).getDisplayValues() : [];
     stage = 'build-invitations';
     var invitations = {};
-    rows.slice(1).forEach(function(row, index) {
+    rows.slice(1).forEach(function(row) {
       if (!row[0]) return;
       var key = '$' + row[0];
       if (!invitations[key]) invitations[key] = {
         id: row[0], label: row[1], greeting: row[2], guests: []
       };
       invitations[key].guests.push({
-        id: row[3], name: row[4], relationship: row[5],
-        havePlusOne: (plusOneRows[index] && plusOneRows[index][0] || '').trim() === '1'
+        id: row[3], name: row[4], havePlusOne: (row[5] || '').trim() === '1', relationship: row[6]
       });
     });
     if (input.action === 'search') {
@@ -98,12 +93,10 @@ function doPost(e) {
     var savedAt = new Date().toISOString();
     rows.slice(1).forEach(function(row, index) {
       if (row[0] !== invitation.id) return;
-      sheet.getRange(index + 2, 7, 1, 3).setValues([[
-        r.guestIds.indexOf(row[3]) >= 0 ? 'Yes' : 'No',
+      sheet.getRange(index + 2, 8, 1, 3).setValues([[
+        r.guestIds.indexOf(row[3]) < 0 ? 'No' :
+          plusOneGuestIds.indexOf(row[3]) >= 0 ? 'Yes +1' : 'Yes',
         literal_(r.message === undefined ? '' : r.message), savedAt
-      ]]);
-      sheet.getRange(index + 2, 11, 1, 1).setValues([[
-        plusOneGuestIds.indexOf(row[3]) >= 0 ? 'Yes' : 'No'
       ]]);
     });
     SpreadsheetApp.flush();
@@ -122,7 +115,7 @@ function setupError_(message) {
   return error;
 }
 
-// Run once from the editor. Existing RSVP answers remain in Guests G:I.
+// Run once from the editor. Existing RSVP answers remain in Guests H:J.
 function setupInvitationGroups() {
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -133,8 +126,8 @@ function setupInvitationGroups() {
     var guests = book.getSheetByName('Guests');
     if (!guests) throw new Error('Create the Guests tab first.');
     var rows = guests.getDataRange().getDisplayValues();
-    if (rows[0].slice(0, 6).join(',') !== 'invitationId,label,greeting,guestId,name,relationship') {
-      throw new Error('Guests A1:F1 must be invitationId,label,greeting,guestId,name,relationship.');
+    if (rows[0].slice(0, 7).join(',') !== 'invitationId,label,greeting,guestId,name,havePlusOne,relationship') {
+      throw new Error('Guests A1:G1 must be invitationId,label,greeting,guestId,name,havePlusOne,relationship.');
     }
     var invitations = book.getSheetByName('Invitations');
     // Validate before replacing any existing guest labels.

@@ -142,7 +142,7 @@ export class RsvpComponent implements OnDestroy {
   chooseInvitation(invitation: Invitation) {
     this.cancelAutocomplete();
     this.invitation.set(invitation);
-    this.selectedIds.set(invitation.guests.map(guest => guest.id));
+    this.selectedIds.set([]);
     this.plusOneIds.set([]);
     this.attendance = '';
     this.message = '';

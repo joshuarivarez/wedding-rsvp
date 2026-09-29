@@ -2,7 +2,7 @@
 
 ## Invitation groups
 
-Paste the updated `Code.gs` into Apps Script, save, and run **setupInvitationGroups** once from the editor. It creates and fills an `Invitations` tab from your existing guests, then replaces Guests B:C with automatic lookup formulas and adds an invitation dropdown in Guests A. Existing guest identities and RSVP answers in D:I stay in place. If an Invitations tab already exists, its labels and greetings take priority. Conflicting existing household labels must be resolved before the first migration.
+Paste the updated `Code.gs` into Apps Script, save, and run **setupInvitationGroups** once from the editor. It creates and fills an `Invitations` tab from your existing guests, then replaces Guests B:C with automatic lookup formulas and adds an invitation dropdown in Guests A. Existing guest identities, eligibility, and RSVP answers stay in place. If an Invitations tab already exists, its labels and greetings take priority. Conflicting existing household labels must be resolved before the first migration.
 
 The new tab has one row per invitation:
 
@@ -11,27 +11,27 @@ The new tab has one row per invitation:
 | demo-dela-cruz | Juan & Maria Dela Cruz | Juan & Maria |
 | santos-family | The Santos Family | the Santos family |
 
-Add a group here, then choose its ID in **Guests column A** for each member. Edit guest names and relationships in Guests D:F. Labels and greetings update automatically in Guests B:C and appear on the next website lookup. Adding an invitation does not create people: add one Guests row per person. A group without guests will not appear in website search.
+Add a group here, then choose its ID in **Guests column A** for each member. Edit guest names in Guests E and relationships in G; set plus-one eligibility in F. Labels and greetings update automatically in Guests B:C and appear on the next website lookup. Adding an invitation does not create people: add one Guests row per person. A group without guests will not appear in website search.
 
 Keep IDs unique (including capitalization), stable, and identical across tabs. To move a guest, change their Guests A value. Do not delete an invitation while guests still reference it. Do not type into Guests B:C or sort those formula columns; use filter views for browsing. The dropdown covers current sheet rows; rerun setup after expanding the sheet if new rows lack it. Formula results update automatically without triggers or an Angular rebuild. Setup may be rerun to restore formulas and dropdowns.
 
 This uses [ARRAYFORMULA](https://support.google.com/docs/answer/3093275) and [VLOOKUP](https://support.google.com/docs/answer/3093318). The existing web endpoint continues reading Guests; no new endpoint is needed.
 
-The Guests sheet uses columns A:I for invitation and RSVP data, J (`havePlusOne`) for eligibility, and K (`bringingPlusOne`) for the guest's RSVP choice. Enter `1` in J only for guests allowed to bring one additional person; the website displays their checkbox only. K is maintained by the script. Existing sheets need both headers added in J1:K1 before deploying the updated script.
+The Guests sheet header order is A `invitationId`, B `label`, C `greeting`, D `guestId`, E `name`, F `havePlusOne`, G `relationship`, H `attending`, I `message`, and J `updatedAt`. Enter `1` in F only for guests allowed to bring one additional person; the website displays their checkbox only. When an eligible guest selects it, H is saved as `Yes +1`; no extra column is required.
 
-If migrating from the original 12-column sheet, delete columns H:J (`dietary`, `allergies`, `song`). This moves `message` to H and `updatedAt` to I. Then add `havePlusOne` and `bringingPlusOne` in J1:K1. Replace the Apps Script code and update its deployment to a new version at the same time. The new header range is A1:K1.
+If migrating from the original 12-column sheet, delete columns H:J (`dietary`, `allergies`, `song`), then arrange the guest columns in the header order above. Replace the Apps Script code and update its deployment to a new version at the same time. The new header range is A1:J1.
 
-The Angular gateway replaces the fictional invitations when `SHEETS_WEB_APP_URL` is configured. Searches read the Sheet on demand; submissions update every guest in the selected invitation to Yes or No and record plus-one choices in K. The message is optional and may be blank or omitted. Previous answers are not prefilled.
+The Angular gateway replaces the fictional invitations when `SHEETS_WEB_APP_URL` is configured. Searches read the Sheet on demand; submissions update every guest in the selected invitation to Yes, Yes +1, or No in H. The message is optional and may be blank or omitted. Previous answers are not prefilled.
 
 1. Create a private spreadsheet with a tab named `Guests`. Paste these rows into cell A1 (tab separated):
 
 ```text
-invitationId	label	greeting	guestId	name	relationship	attending	message	updatedAt	havePlusOne	bringingPlusOne
-demo-dela-cruz	Juan & Maria Dela Cruz	Juan & Maria	demo-juan-dela-cruz	Juan Dela Cruz	Primary guest
-demo-dela-cruz	Juan & Maria Dela Cruz	Juan & Maria	demo-maria-dela-cruz	Maria Dela Cruz	Spouse
+invitationId	label	greeting	guestId	name	havePlusOne	relationship	attending	message	updatedAt
+demo-dela-cruz	Juan & Maria Dela Cruz	Juan & Maria	demo-juan-dela-cruz	Juan Dela Cruz	1	Primary guest
+demo-dela-cruz	Juan & Maria Dela Cruz	Juan & Maria	demo-maria-dela-cruz	Maria Dela Cruz	0	Spouse
 ```
 
-2. Use one row per guest, unique guest IDs, and the same invitation ID, label, and greeting for guests in a household. Set `havePlusOne` to `1` for eligible guests and `0` or blank for others. Leave attendance and `bringingPlusOne` blank until they reply. Preserve header order; do not use formulas in the response columns G:I or K.
+2. Use one row per guest, unique guest IDs, and the same invitation ID, label, and greeting for guests in a household. Set `havePlusOne` in F to `1` for eligible guests and `0` or blank for others. Leave attendance, message, and updatedAt blank until they reply. Preserve header order; do not use formulas in response columns H:J.
 3. Open **Extensions > Apps Script**, paste `Code.gs`, and save.
 4. In **Project Settings > Script properties**, add `SPREADSHEET_ID`: the ID between `/d/` and `/edit` in the spreadsheet URL.
 5. Choose **Deploy > New deployment > Web app**. Execute as **Me**, allow access to **Anyone**, and authorize spreadsheet access. If your Workspace account disallows anonymous web apps, this configuration cannot serve signed-out guests.
