@@ -1,7 +1,7 @@
 // Set SPREADSHEET_ID in Project Settings > Script properties.
 // Guests headers (in this order):
-// invitationId,label,greeting,guestId,name,relationship,attending,message,updatedAt
-var SCRIPT_VERSION = 'rsvp-9-columns-v2';
+// invitationId,label,greeting,guestId,name,relationship,attending,message,updatedAt,havePlusOne,bringingPlusOne
+var SCRIPT_VERSION = 'rsvp-11-columns-v3';
 
 function doPost(e) {
   var lock;
@@ -43,19 +43,25 @@ function doPost(e) {
     var headers = ['invitationId','label','greeting','guestId','name','relationship',
       'attending','message','updatedAt'];
     var responseHeaders = sheet.getRange(1, 7, 1, 3).getDisplayValues()[0];
+    var plusOneHeaders = sheet.getRange(1, 10, 1, 2).getDisplayValues()[0];
     if (!rows.length || !headers.slice(0, 6).every(function(h, i) { return (rows[0][i] || '').trim() === h; }) ||
-        !headers.slice(6).every(function(h, i) { return (responseHeaders[i] || '').trim() === h; })) {
-      throw setupError_('Guest sheet headers must match the setup guide in cells A1:I1, one header per column.');
+        !headers.slice(6).every(function(h, i) { return (responseHeaders[i] || '').trim() === h; }) ||
+        plusOneHeaders[0] !== 'havePlusOne' || plusOneHeaders[1] !== 'bringingPlusOne') {
+      throw setupError_('Guest sheet headers must match the setup guide in cells A1:K1, one header per column.');
     }
+    var plusOneRows = lastRow > 1 ? sheet.getRange(2, 10, lastRow - 1, 1).getDisplayValues() : [];
     stage = 'build-invitations';
     var invitations = {};
-    rows.slice(1).forEach(function(row) {
+    rows.slice(1).forEach(function(row, index) {
       if (!row[0]) return;
       var key = '$' + row[0];
       if (!invitations[key]) invitations[key] = {
         id: row[0], label: row[1], greeting: row[2], guests: []
       };
-      invitations[key].guests.push({ id: row[3], name: row[4], relationship: row[5] });
+      invitations[key].guests.push({
+        id: row[3], name: row[4], relationship: row[5],
+        havePlusOne: (plusOneRows[index] && plusOneRows[index][0] || '').trim() === '1'
+      });
     });
     if (input.action === 'search') {
       stage = 'search';
@@ -76,6 +82,13 @@ function doPost(e) {
     var allowed = invitation.guests.map(function(g) { return g.id; });
     if (!Array.isArray(r.guestIds) || r.guestIds.some(function(id) { return allowed.indexOf(id) < 0; }) ||
         new Set(r.guestIds).size !== r.guestIds.length) throw new Error('Please select only guests on your invitation.');
+    var plusOneGuestIds = r.plusOneGuestIds === undefined ? [] : r.plusOneGuestIds;
+    var eligiblePlusOneIds = invitation.guests.filter(function(g) { return g.havePlusOne; }).map(function(g) { return g.id; });
+    if (!Array.isArray(plusOneGuestIds) || plusOneGuestIds.some(function(id) {
+      return eligiblePlusOneIds.indexOf(id) < 0 || r.guestIds.indexOf(id) < 0;
+    }) || new Set(plusOneGuestIds).size !== plusOneGuestIds.length) {
+      throw new Error('Please select only eligible attending guests for a plus-one.');
+    }
     if ((r.attendance === 'accepts' && !r.guestIds.length) ||
         (r.attendance === 'declines' && r.guestIds.length)) throw new Error('Please check your guest selection.');
     [['message',1000]].forEach(function(field) {
@@ -88,6 +101,9 @@ function doPost(e) {
       sheet.getRange(index + 2, 7, 1, 3).setValues([[
         r.guestIds.indexOf(row[3]) >= 0 ? 'Yes' : 'No',
         literal_(r.message === undefined ? '' : r.message), savedAt
+      ]]);
+      sheet.getRange(index + 2, 11, 1, 1).setValues([[
+        plusOneGuestIds.indexOf(row[3]) >= 0 ? 'Yes' : 'No'
       ]]);
     });
     SpreadsheetApp.flush();

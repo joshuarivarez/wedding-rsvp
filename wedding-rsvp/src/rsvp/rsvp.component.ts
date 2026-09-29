@@ -25,6 +25,7 @@ export class RsvpComponent implements OnDestroy {
   readonly searched = signal(false);
   readonly invitation = signal<Invitation | null>(null);
   readonly selectedIds = signal<string[]>([]);
+  readonly plusOneIds = signal<string[]>([]);
   readonly receipt = signal<RsvpReceipt | null>(null);
   readonly steps = ['Find', 'Invitation', 'Attendance', 'Guests'];
   query = '';
@@ -142,6 +143,7 @@ export class RsvpComponent implements OnDestroy {
     this.cancelAutocomplete();
     this.invitation.set(invitation);
     this.selectedIds.set(invitation.guests.map(guest => guest.id));
+    this.plusOneIds.set([]);
     this.attendance = '';
     this.message = '';
     this.receipt.set(null);
@@ -175,6 +177,15 @@ export class RsvpComponent implements OnDestroy {
     if (!this.invitation()?.guests.some(guest => guest.id === id)) return;
     const checked = (event.target as HTMLInputElement).checked;
     this.selectedIds.update(ids => checked ? [...new Set([...ids, id])] : ids.filter(value => value !== id));
+    if (!checked) this.plusOneIds.update(ids => ids.filter(value => value !== id));
+    this.error.set('');
+  }
+
+  togglePlusOne(id: string, event: Event) {
+    const guest = this.invitation()?.guests.find(item => item.id === id);
+    if (!guest?.havePlusOne || !this.selectedIds().includes(id)) return;
+    const checked = (event.target as HTMLInputElement).checked;
+    this.plusOneIds.update(ids => checked ? [...new Set([...ids, id])] : ids.filter(value => value !== id));
     this.error.set('');
   }
 
@@ -202,6 +213,7 @@ export class RsvpComponent implements OnDestroy {
         invitationId: invitation.id,
         attendance: this.attendance,
         guestIds: this.attendance === 'accepts' ? this.selectedIds() : [],
+        plusOneGuestIds: this.attendance === 'accepts' ? this.plusOneIds() : [],
         message: this.message.trim(),
       });
       this.receipt.set(receipt);

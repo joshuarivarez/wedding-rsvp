@@ -2,6 +2,7 @@ export interface InvitedGuest {
   id: string;
   name: string;
   relationship: string;
+  havePlusOne: boolean;
 }
 
 export interface Invitation {
@@ -17,6 +18,7 @@ export interface RsvpResponse {
   invitationId: string;
   attendance: Attendance;
   guestIds: string[];
+  plusOneGuestIds?: string[];
   message?: string;
 }
 

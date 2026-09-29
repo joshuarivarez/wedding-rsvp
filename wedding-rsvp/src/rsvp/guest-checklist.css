@@ -63,6 +63,46 @@
   color: #61704f;
 }
 
+.plus-one-list {
+  margin: 12px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.plus-one-list legend {
+  margin-bottom: 5px;
+}
+
+.plus-one-list label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.plus-one-list label span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.plus-one-list label strong {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.plus-one-list label small {
+  color: #85766a;
+  font-size: 9px;
+}
+
+.plus-one-list label.unavailable {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
 @media (max-width: 380px) {
   .guest-checklist .guest-choice {
     display: none;

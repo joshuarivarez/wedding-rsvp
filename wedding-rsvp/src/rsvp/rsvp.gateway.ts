@@ -35,6 +35,13 @@ export class MockRsvpGateway implements RsvpGateway {
       new Set(response.guestIds).size !== response.guestIds.length) {
       throw new Error('Please select only the guests listed on your invitation.');
     }
+    const plusOneGuestIds = response.plusOneGuestIds ?? [];
+    const eligiblePlusOneIds = new Set(invitation.guests.filter(guest => guest.havePlusOne).map(guest => guest.id));
+    if (!Array.isArray(plusOneGuestIds) || plusOneGuestIds.some(id =>
+      !eligiblePlusOneIds.has(id) || !response.guestIds.includes(id)) ||
+      new Set(plusOneGuestIds).size !== plusOneGuestIds.length) {
+      throw new Error('Please select only eligible attending guests for a plus-one.');
+    }
     if (response.attendance === 'accepts' && !response.guestIds.length) {
       throw new Error('Please select at least one guest, or choose “Regretfully declines.”');
     }

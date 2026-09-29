@@ -5,10 +5,10 @@ const vm = require('node:vm');
 
 function fixture(options = {}) {
   const rows = [
-    ['invitationId','label','greeting','guestId','name','relationship','attending','message','updatedAt'],
-    ['house','Juan & Maria','Juan & Maria','juan','Juan','Primary guest',''],
-    ['house','Juan & Maria','Juan & Maria','maria','Maria','Spouse',''],
-    ['other','Sofia','Sofia','sofia','Sofia','Primary guest',''],
+    ['invitationId','label','greeting','guestId','name','relationship','attending','message','updatedAt','havePlusOne','bringingPlusOne'],
+    ['house','Juan & Maria','Juan & Maria','juan','Juan','Primary guest','','','','1',''],
+    ['house','Juan & Maria','Juan & Maria','maria','Maria','Spouse','','','','0',''],
+    ['other','Sofia','Sofia','sofia','Sofia','Primary guest','','','','0',''],
   ];
   const metrics = { reads: [], lockWaits: 0 };
   const sheet = {
@@ -53,7 +53,7 @@ test('setup errors identify missing ID, missing tab, and malformed headers', () 
   assert.match(fixture({ missingTab: true }).request(lookup).error, /Missing sheet tab/);
   const f = fixture();
   f.rows[0][0] = 'wrong';
-  assert.match(f.request(lookup).error, /A1:I1/);
+  assert.match(f.request(lookup).error, /A1:K1/);
 });
 
 test('search groups household guests and excludes saved notes', () => {
@@ -63,13 +63,15 @@ test('search groups household guests and excludes saved notes', () => {
   assert.equal(result.ok, true);
   assert.equal(result.data.length, 1);
   assert.equal(result.data[0].guests.length, 2);
+  assert.equal(result.data[0].guests[0].havePlusOne, true);
+  assert.equal(result.data[0].guests[1].havePlusOne, false);
   assert.equal(JSON.stringify(result).includes('private note'), false);
 });
 
 test('search reads only guest identity columns and does not acquire the write lock', () => {
   const f = fixture();
   assert.equal(f.request({ action: 'search', name: 'Maria' }).ok, true);
-  assert.deepEqual(f.metrics.reads, [[1, 1, 4, 6], [1, 7, 1, 3]]);
+  assert.deepEqual(f.metrics.reads, [[1, 1, 4, 6], [1, 7, 1, 3], [1, 10, 1, 2], [2, 10, 3, 1]]);
   assert.equal(f.metrics.lockWaits, 0);
 });
 
@@ -98,4 +100,14 @@ test('updates checked and unchecked guests, supports decline, rejects foreign gu
   assert.equal(f.rows[2][6], 'Yes');
   assert.equal(f.request({ action: 'submit', response: { ...response, attendance: 'declines', guestIds: [] } }).ok, true);
   assert.equal(f.rows[2][6], 'No');
+});
+
+test('plus-one answers are saved only for eligible attending guests', () => {
+  const f = fixture();
+  const response = { invitationId: 'house', attendance: 'accepts', guestIds: ['juan'], plusOneGuestIds: ['juan'] };
+  assert.equal(f.request({ action: 'submit', response }).ok, true);
+  assert.equal(f.rows[1][10], 'Yes');
+  assert.equal(f.rows[2][10], 'No');
+  assert.equal(f.request({ action: 'submit', response: { ...response, plusOneGuestIds: ['maria'] } }).ok, false);
+  assert.equal(f.request({ action: 'submit', response: { ...response, guestIds: [], plusOneGuestIds: ['juan'] } }).ok, false);
 });
