@@ -10,19 +10,28 @@ function fixture(options = {}) {
     ['house','Juan & Maria','Juan & Maria','maria','Maria','Spouse',''],
     ['other','Sofia','Sofia','sofia','Sofia','Primary guest',''],
   ];
+  const metrics = { reads: [], lockWaits: 0 };
   const sheet = {
-    getDataRange: () => ({ getDisplayValues: () => rows.map(r => [...r]) }),
-    getRange: (row, column) => ({ setValues: values => values[0].forEach((v, i) => { rows[row - 1][column - 1 + i] = v; }) }),
+    getLastRow: () => rows.length,
+    getRange: (row, column, numRows = 1, numColumns = 1) => ({
+      getDisplayValues: () => {
+        metrics.reads.push([row, column, numRows, numColumns]);
+        return rows.slice(row - 1, row - 1 + numRows).map(values => values.slice(column - 1, column - 1 + numColumns));
+      },
+      setValues: values => values.forEach((valuesRow, rowIndex) => valuesRow.forEach((value, columnIndex) => {
+        rows[row - 1 + rowIndex][column - 1 + columnIndex] = value;
+      })),
+    }),
   };
   const context = vm.createContext({
     console: { error() {} },
     PropertiesService: { getScriptProperties: () => ({ getProperty: () => options.missingId ? null : 'sheet' }) },
     SpreadsheetApp: { openById: () => ({ getSheetByName: () => options.missingTab ? null : sheet }), flush() {} },
-    LockService: { getScriptLock: () => ({ waitLock() {}, hasLock: () => true, releaseLock() {} }) },
+    LockService: { getScriptLock: () => ({ waitLock() { metrics.lockWaits++; }, hasLock: () => true, releaseLock() {} }) },
     ContentService: { MimeType: { JSON: 'json' }, createTextOutput: text => ({ setMimeType: () => text }) },
   });
   vm.runInContext(fs.readFileSync('google-apps-script/Code.gs', 'utf8'), context);
-  return { rows, groups: existing => context.invitationGroups_(rows, existing), request: body => JSON.parse(context.doPost({ postData: { contents: JSON.stringify(body) } })) };
+  return { rows, metrics, groups: existing => context.invitationGroups_(rows, existing), request: body => JSON.parse(context.doPost({ postData: { contents: JSON.stringify(body) } })) };
 }
 
 test('group migration deduplicates households and preserves existing invitation edits', () => {
@@ -55,6 +64,13 @@ test('search groups household guests and excludes saved notes', () => {
   assert.equal(result.data.length, 1);
   assert.equal(result.data[0].guests.length, 2);
   assert.equal(JSON.stringify(result).includes('private note'), false);
+});
+
+test('search reads only guest identity columns and does not acquire the write lock', () => {
+  const f = fixture();
+  assert.equal(f.request({ action: 'search', name: 'Maria' }).ok, true);
+  assert.deepEqual(f.metrics.reads, [[1, 1, 4, 6], [1, 7, 1, 3]]);
+  assert.equal(f.metrics.lockWaits, 0);
 });
 
 test('message may be omitted or empty but must respect type and length', () => {

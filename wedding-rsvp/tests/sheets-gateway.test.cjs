@@ -30,9 +30,37 @@ test('lookup retries a network failure once and reads the confirmed result', asy
   assert.equal(calls, 2);
 });
 
+test('lookup retries a ContentService echo 404 once', async () => {
+  let calls = 0;
+  const g = gateway(async () => {
+    if (++calls === 1) return {
+      ok: false,
+      status: 404,
+      url: 'https://script.googleusercontent.com/macros/echo?user_content_key=expired',
+    };
+    return { ok: true, json: async () => ({ ok: true, data: [] }) };
+  });
+  assert.equal((await g.findInvitations('Juan')).length, 0);
+  assert.equal(calls, 2);
+});
+
 test('submissions never retry after an ambiguous network failure', async () => {
   let calls = 0;
   const g = gateway(async () => { calls++; throw new TypeError('Failed to fetch'); });
+  await assert.rejects(g.submit({}), /could not confirm/);
+  assert.equal(calls, 1);
+});
+
+test('submissions never retry after a ContentService echo 404', async () => {
+  let calls = 0;
+  const g = gateway(async () => {
+    calls++;
+    return {
+      ok: false,
+      status: 404,
+      url: 'https://script.googleusercontent.com/macros/echo?user_content_key=expired',
+    };
+  });
   await assert.rejects(g.submit({}), /could not confirm/);
   assert.equal(calls, 1);
 });

@@ -24,7 +24,12 @@ export class SheetsRsvpGateway implements RsvpGateway {
     } catch {
       throw new SheetsConnectionError('We could not confirm a response from the guest list. Please try again.');
     }
-    if (!response.ok) throw new Error('The guest list is unavailable. Please try again.');
+    if (!response.ok) {
+      if (response.status === 404 && response.url.includes('script.googleusercontent.com/macros/echo')) {
+        throw new SheetsConnectionError('We could not confirm a response from the guest list. Please try again.');
+      }
+      throw new Error('The guest list is unavailable. Please try again.');
+    }
     let result: { ok: boolean; data: T; error?: string };
     try { result = await response.json(); }
     catch { throw new Error('The guest list returned an unexpected response. Please contact the couple.'); }

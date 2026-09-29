@@ -12,9 +12,17 @@ function doPost(e) {
     try { input = JSON.parse(e.postData.contents); }
     catch (_) { throw setupError_('Request body must be valid JSON.'); }
     if (!input || typeof input !== 'object' || Array.isArray(input)) throw setupError_('Request body must be a JSON object.');
-    stage = 'lock';
-    lock = LockService.getScriptLock();
-    lock.waitLock(10000);
+    if (input.action !== 'search' && input.action !== 'submit') throw new Error('Unknown request.');
+    if (input.action === 'search') {
+      if (typeof input.name !== 'string' || input.name.length > 150) throw setupError_('Please enter your invitation name.');
+      var query = normalize_(input.name);
+      if (query.length < 3) throw new Error('Please enter at least 3 letters from your invitation.');
+      var tokens = query.split(' ').filter(function(t) { return t !== 'and'; });
+    } else {
+      stage = 'lock';
+      lock = LockService.getScriptLock();
+      lock.waitLock(10000);
+    }
     stage = 'spreadsheet';
     var spreadsheetId = (PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID') || '').trim();
     if (!spreadsheetId) throw setupError_('Missing SPREADSHEET_ID in Apps Script Project Settings > Script properties.');
@@ -30,10 +38,13 @@ function doPost(e) {
     var sheet = spreadsheet.getSheetByName('Guests');
     if (!sheet) throw setupError_('Missing sheet tab named Guests. Rename the guest list tab to Guests.');
     stage = 'read-sheet';
-    var rows = sheet.getDataRange().getDisplayValues();
+    var lastRow = sheet.getLastRow();
+    var rows = lastRow ? sheet.getRange(1, 1, lastRow, 6).getDisplayValues() : [];
     var headers = ['invitationId','label','greeting','guestId','name','relationship',
       'attending','message','updatedAt'];
-    if (!headers.every(function(h, i) { return (rows[0][i] || '').trim() === h; })) {
+    var responseHeaders = sheet.getRange(1, 7, 1, 3).getDisplayValues()[0];
+    if (!rows.length || !headers.slice(0, 6).every(function(h, i) { return (rows[0][i] || '').trim() === h; }) ||
+        !headers.slice(6).every(function(h, i) { return (responseHeaders[i] || '').trim() === h; })) {
       throw setupError_('Guest sheet headers must match the setup guide in cells A1:I1, one header per column.');
     }
     stage = 'build-invitations';
@@ -48,10 +59,6 @@ function doPost(e) {
     });
     if (input.action === 'search') {
       stage = 'search';
-      if (typeof input.name !== 'string' || input.name.length > 150) throw setupError_('Please enter your invitation name.');
-      var query = normalize_(input.name);
-      if (query.length < 3) throw new Error('Please enter at least 3 letters from your invitation.');
-      var tokens = query.split(' ').filter(function(t) { return t !== 'and'; });
       var matches = Object.keys(invitations).map(function(k) { return invitations[k]; })
         .filter(function(inv) {
           var words = normalize_([inv.label].concat(inv.guests.map(function(g) { return g.name; })).join(' ')).split(' ');
@@ -62,7 +69,6 @@ function doPost(e) {
       return json_({ ok: true, data: matches });
     }
     stage = 'validate-submission';
-    if (input.action !== 'submit') throw new Error('Unknown request.');
     var r = input.response;
     var invitation = r && invitations['$' + r.invitationId];
     if (!invitation) throw new Error('Please find your invitation again.');
