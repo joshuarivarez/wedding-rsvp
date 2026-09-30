@@ -10,7 +10,8 @@
       <button #galleryButton type="button" class="gallery-item" [class]="photo.layout"
         (click)="open(index)" [attr.aria-label]="'Open photo: ' + photo.caption">
         <img [src]="photo.src" [alt]="photo.alt" loading="lazy" decoding="async">
-        <span><small>{{ (index + 1).toString().padStart(2, '0') }}</small>{{ photo.caption }} <i aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></i></span>
+        <time class="gallery-date" [attr.datetime]="photo.date.iso">{{ photo.date.label }}</time>
+        <span class="gallery-caption"><small>{{ (index + 1).toString().padStart(2, '0') }}</small>{{ photo.caption }} <i aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></i></span>
       </button>
     }
   </div>

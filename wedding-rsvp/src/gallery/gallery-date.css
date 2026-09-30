@@ -1,0 +1,17 @@
+.gallery-item > .gallery-date {
+  position: absolute;
+  z-index: 2;
+  top: 16px;
+  right: auto;
+  bottom: auto;
+  left: 50%;
+  display: block;
+  transform: translateX(-50%);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-style: normal;
+  letter-spacing: 2px;
+  line-height: 1;
+  white-space: nowrap;
+  text-shadow: 0 1px 8px rgb(0 0 0 / 75%);
+}

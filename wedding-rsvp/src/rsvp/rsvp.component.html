@@ -1,5 +1,5 @@
 <div class="invitation-rsvp" [attr.aria-busy]="busy()">
-  @if (isMock && (busy() || autocompleteBusy())) {
+  @if (isMock && busy()) {
     <div class="rsvp-loading" role="status">
       <img class="loader-image" src="assets/loader.gif" alt="" width="72" height="72">
       <span>{{ busy() && step() === 4 ? 'Saving your RSVP…' : 'Finding your invitation…' }}</span>
@@ -20,42 +20,27 @@
       <p class="eyebrow">YOUR INVITATION AWAITS</p>
       <h3 #stepHeading tabindex="-1">Find your invitation</h3>
       <p class="step-description">Enter your name as written on your invitation.</p>
-      <form (ngSubmit)="search()">
+      <div>
         <label for="invitation-search">Name on your invitation</label>
         <div class="search-field">
           <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm5 12 6 6"/></svg></span>
           <input id="invitation-search" name="query" [ngModel]="query" (ngModelChange)="queryChanged($event)"
-            (focus)="searchFocused()" (blur)="searchBlurred()" (keydown)="searchKeydown($event)"
             [disabled]="busy()" maxlength="120" autocomplete="off" placeholder="Search your name…"
-            role="combobox" aria-autocomplete="list" [attr.aria-expanded]="suggestionsOpen()"
-            aria-controls="invitation-suggestions"
-            [attr.aria-activedescendant]="activeSuggestion() >= 0 && suggestionsOpen() ? suggestionId(activeSuggestion()) : null"
             aria-describedby="search-help">
-          @if (suggestionsOpen()) {
-            <div id="invitation-suggestions" class="autocomplete-menu" role="listbox" aria-label="Matching invitations">
-              @for (suggestion of suggestions(); track suggestion.id; let index = $index) {
-                <div class="autocomplete-option" role="option" [id]="suggestionId(index)"
-                  [class.active]="activeSuggestion() === index" [attr.aria-selected]="activeSuggestion() === index"
-                  (mouseenter)="activeSuggestion.set(index)" (mousedown)="$event.preventDefault(); selectSuggestion(suggestion)">
-                  <span><strong>{{ suggestion.label }}</strong><small>{{ suggestion.guests.length }} {{ suggestion.guests.length === 1 ? 'guest' : 'guests' }} invited</small></span>
-                  <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span>
-                </div>
+          @if (matches().length) {
+            <div class="lookup-results search-results-dropdown" role="group" aria-label="Matching invitations">
+              <p role="status">We found {{ matches().length }} {{ matches().length === 1 ? 'invitation' : 'invitations' }}. Choose yours:</p>
+              @for (match of matches(); track match.id) {
+                <button type="button" class="invitation-match" (click)="chooseInvitation(match)"><span><strong>{{ match.label }}</strong><small>{{ match.guests.length }} {{ match.guests.length === 1 ? 'guest' : 'guests' }} invited</small></span><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></button>
               }
             </div>
           }
         </div>
         <p id="search-help" class="field-hint">You can search using the name of any guest on your invitation.</p>
-        <button class="button submit" type="submit" [disabled]="busy()">{{ busy() ? 'Finding your invitation…' : 'Find invitation' }}<span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button>
-      </form>
+        <button class="button submit" type="button" (click)="search()" [disabled]="busy()">{{ busy() ? 'Finding your invitation…' : 'Find invitation' }}<span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button>
+      </div>
       @if (searched() && matches().length === 0) {
         <div class="lookup-note" role="status"><strong>We couldn’t find your invitation.</strong><p>Try your full name or another name on your invitation. If you’re still having trouble, please contact Joshua or Judy Ann.</p></div>
-      }
-      @if (matches().length > 1) {
-        <div class="lookup-results"><p role="status">We found {{ matches().length }} invitations. Choose yours:</p>
-          @for (match of matches(); track match.id) {
-            <button type="button" class="invitation-match" (click)="chooseInvitation(match)"><span><strong>{{ match.label }}</strong><small>{{ match.guests.length }} {{ match.guests.length === 1 ? 'guest' : 'guests' }} invited</small></span><span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></button>
-          }
-        </div>
       }
       @if (isMock) {<aside class="mock-guide"><strong>Try a sample invitation</strong><p>Juan & Maria Dela Cruz · Sofia Reyes · The Santos Family</p></aside>}
     </div>

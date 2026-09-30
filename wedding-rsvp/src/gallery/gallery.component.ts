@@ -4,6 +4,7 @@ interface GalleryPhoto {
   src: string;
   alt: string;
   caption: string;
+  date: { label: string; iso: string };
   layout: 'wide' | 'tall' | 'standard';
 }
 
@@ -11,21 +12,21 @@ interface GalleryPhoto {
   selector: 'wedding-gallery',
   standalone: true,
   templateUrl: './gallery.component.html',
-  styleUrl: './gallery.component.css',
+  styleUrls: ['./gallery.component.css', './gallery-date.css'],
 })
 export class GalleryComponent implements OnDestroy {
   @ViewChildren('galleryButton') private galleryButtons?: QueryList<ElementRef<HTMLButtonElement>>;
   @ViewChild('closeButton') private closeButton?: ElementRef<HTMLButtonElement>;
 
   readonly photos: readonly GalleryPhoto[] = [
-    { src: 'assets/gallery-images/moment-to-remember.JPG', alt: 'A favorite moment from our photo collection', caption: 'A moment to remember', layout: 'wide' },
-    { src: 'assets/gallery-images/6R2.JPG', alt: 'A favorite moment from our photo collection', caption: 'Together, always', layout: 'tall' },
-    { src: 'assets/gallery-images/little-things.JPG', alt: 'A favorite moment from our photo collection', caption: 'The little things', layout: 'standard' },
-    { src: 'assets/gallery-images/hk.JPEG', alt: 'A favorite moment from our photo collection', caption: 'Our forever, our fairytale', layout: 'standard' },
-    { src: 'assets/gallery-images/favorite-memories.jpg', alt: 'A favorite moment from our photo collection', caption: 'A wish for a lifetime of us', layout: 'tall' },
-    { src: 'assets/gallery-images/treasure.jpg', alt: 'A favorite moment from our photo collection', caption: 'A lifetime of smiles and laughter', layout: 'wide' },
-    { src: 'assets/gallery-images/beginning.jpg', alt: 'A favorite moment from our photo collection', caption: 'The beginning of forever', layout: 'tall' },
-    { src: 'assets/gallery-images/5yrs.jpg', alt: 'A favorite moment from our photo collection', caption: 'A love that grows with every chapter', layout: 'wide' },
+    { src: 'assets/gallery-images/moment-to-remember.JPG', alt: 'A favorite moment from our photo collection', caption: 'A moment to remember', date: { label: '08.02.20', iso: '2020-08-02' }, layout: 'wide' },
+    { src: 'assets/gallery-images/6R2.JPG', alt: 'A favorite moment from our photo collection', caption: 'Together, always', date: { label: '09.27.25', iso: '2025-09-27' }, layout: 'tall' },
+    { src: 'assets/gallery-images/little-things.JPG', alt: 'A favorite moment from our photo collection', caption: 'The little things', date: { label: '09.08.19', iso: '2019-09-08' }, layout: 'standard' },
+    { src: 'assets/gallery-images/hk.JPEG', alt: 'A favorite moment from our photo collection', caption: 'Our forever, our fairytale', date: { label: '10.13.25', iso: '2025-10-13' }, layout: 'standard' },
+    { src: 'assets/gallery-images/favorite-memories.jpg', alt: 'A favorite moment from our photo collection', caption: 'A wish for a lifetime of us', date: { label: '03.20.26', iso: '2026-03-20' }, layout: 'tall' },
+    { src: 'assets/gallery-images/treasure.jpg', alt: 'A favorite moment from our photo collection', caption: 'A lifetime of smiles and laughter', date: { label: '02.12.22', iso: '2022-02-12' }, layout: 'wide' },
+    { src: 'assets/gallery-images/beginning.jpg', alt: 'A favorite moment from our photo collection', caption: 'The beginning of forever', date: { label: '02.07.26', iso: '2026-02-07' }, layout: 'tall' },
+    { src: 'assets/gallery-images/5yrs.jpg', alt: 'A favorite moment from our photo collection', caption: 'A love that grows with every chapter', date: { label: '08.02.25', iso: '2025-08-02' }, layout: 'wide' },
   ];
 
   readonly activeIndex = signal<number | null>(null);

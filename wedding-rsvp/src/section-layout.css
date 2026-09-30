@@ -1,3 +1,7 @@
+.hero .intro {
+  margin-bottom: 24px;
+}
+
 .event-details,
 .reminder-grid {
   display: grid;

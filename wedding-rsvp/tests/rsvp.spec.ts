@@ -6,6 +6,8 @@ async function findInvitation(page: Page, name = 'Juan & Maria Dela Cruz') {
   await page.goto('/#rsvp');
   await page.getByLabel('Name on your invitation').fill(name);
   await page.getByRole('button', { name: 'Find invitation', exact: true }).click();
+  await expect(page.getByRole('group', { name: 'Matching invitations' })).toBeVisible();
+  await page.locator('.invitation-match').first().click();
   await expect(page.getByRole('heading', { name: 'Is this your invitation?' })).toBeVisible();
 }
 
@@ -17,6 +19,16 @@ async function accept(page: Page, name?: string) {
   await page.locator('.guest-checklist input[type="checkbox"]').first().check();
 }
 
+test('pressing Enter does not search invitations', async ({ page }) => {
+  await page.goto('/#rsvp');
+  await page.getByLabel('Name on your invitation').fill('Ju');
+  await page.getByLabel('Name on your invitation').press('Enter');
+  await expect(page.getByRole('heading', { name: 'Find your invitation' })).toBeVisible();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Find invitation', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('at least 3 letters');
+});
+
 test('search validates input, handles unknown names, and disambiguates matches', async ({ page }) => {
   await page.goto('/#rsvp');
   await page.getByRole('button', { name: 'Find invitation', exact: true }).click();
@@ -27,12 +39,15 @@ test('search validates input, handles unknown names, and disambiguates matches',
   await expect(page.getByRole('button', { name: 'Confirm RSVP', exact: true })).toHaveCount(0);
   await page.getByLabel('Name on your invitation').fill('Juan');
   await page.getByRole('button', { name: 'Find invitation', exact: true }).click();
+  await expect(page.getByRole('group', { name: 'Matching invitations' })).toBeVisible();
   await expect(page.locator('.invitation-match')).toHaveCount(2);
   await page.getByRole('button', { name: /Juan Mendoza/ }).click();
   await expect(page.locator('.invitation-card')).toContainText('1 guest');
   await page.getByRole('button', { name: /Search for a different/ }).click();
   await page.getByLabel('Name on your invitation').fill('  MARÍA   dela CRUZ ');
   await page.getByRole('button', { name: 'Find invitation', exact: true }).click();
+  await expect(page.locator('.invitation-match')).toHaveCount(1);
+  await page.locator('.invitation-match').click();
   await expect(page.locator('.invitation-card h4')).toHaveText('Juan & Maria Dela Cruz');
 });
 

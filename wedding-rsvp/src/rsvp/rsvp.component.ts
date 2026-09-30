@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RSVP_GATEWAY } from './rsvp.gateway';
 import { Attendance, Invitation, RsvpReceipt } from './rsvp.models';
@@ -8,9 +8,9 @@ import { Attendance, Invitation, RsvpReceipt } from './rsvp.models';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './rsvp.component.html',
-  styleUrls: ['./rsvp.component.css', './autocomplete.css', './guest-checklist.css'],
+  styleUrls: ['./rsvp.component.css', './search-results.css', './guest-checklist.css'],
 })
-export class RsvpComponent implements OnDestroy {
+export class RsvpComponent {
   private readonly gateway = inject(RSVP_GATEWAY);
   readonly isMock = this.gateway.mode === 'mock';
   @ViewChild('stepHeading') stepHeading?: ElementRef<HTMLElement>;
@@ -18,10 +18,6 @@ export class RsvpComponent implements OnDestroy {
   readonly busy = signal(false);
   readonly error = signal('');
   readonly matches = signal<Invitation[]>([]);
-  readonly suggestions = signal<Invitation[]>([]);
-  readonly suggestionsOpen = signal(false);
-  readonly autocompleteBusy = signal(false);
-  readonly activeSuggestion = signal(-1);
   readonly searched = signal(false);
   readonly invitation = signal<Invitation | null>(null);
   readonly selectedIds = signal<string[]>([]);
@@ -31,14 +27,6 @@ export class RsvpComponent implements OnDestroy {
   query = '';
   attendance: Attendance | '' = '';
   message = '';
-  private autocompleteTimer?: ReturnType<typeof setTimeout>;
-  private autocompleteRequest = 0;
-
-  ngOnDestroy() {
-    clearTimeout(this.autocompleteTimer);
-    this.autocompleteRequest++;
-  }
-
   private goTo(step: number) {
     this.error.set('');
     this.step.set(step);
@@ -50,75 +38,10 @@ export class RsvpComponent implements OnDestroy {
     this.matches.set([]);
     this.searched.set(false);
     this.error.set('');
-    this.cancelAutocomplete();
-    if (value.trim().length < 3) return;
-    const request = this.autocompleteRequest;
-    this.autocompleteTimer = setTimeout(() => this.loadSuggestions(value.trim(), request), 450);
-  }
-
-  searchFocused() {
-    if (this.suggestions().length && this.query.trim().length >= 3) this.suggestionsOpen.set(true);
-  }
-
-  searchBlurred() {
-    setTimeout(() => this.suggestionsOpen.set(false), 120);
-  }
-
-  searchKeydown(event: KeyboardEvent) {
-    const suggestions = this.suggestions();
-    if (event.key === 'Escape') {
-      this.suggestionsOpen.set(false);
-      this.activeSuggestion.set(-1);
-      return;
-    }
-    if (!this.suggestionsOpen() || !suggestions.length) return;
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      event.preventDefault();
-      const direction = event.key === 'ArrowDown' ? 1 : -1;
-      this.activeSuggestion.set((this.activeSuggestion() + direction + suggestions.length) % suggestions.length);
-    } else if (event.key === 'Enter' && this.activeSuggestion() >= 0) {
-      event.preventDefault();
-      this.selectSuggestion(suggestions[this.activeSuggestion()]);
-    }
-  }
-
-  selectSuggestion(invitation: Invitation) {
-    this.query = invitation.label;
-    this.suggestionsOpen.set(false);
-    this.chooseInvitation(invitation);
-  }
-
-  suggestionId(index: number) {
-    return `invitation-suggestion-${index}`;
-  }
-
-  private cancelAutocomplete() {
-    clearTimeout(this.autocompleteTimer);
-    this.autocompleteRequest++;
-    this.autocompleteBusy.set(false);
-    this.suggestions.set([]);
-    this.suggestionsOpen.set(false);
-    this.activeSuggestion.set(-1);
-  }
-
-  private async loadSuggestions(query: string, request: number) {
-    this.autocompleteBusy.set(true);
-    try {
-      const suggestions = await this.gateway.findInvitations(query);
-      if (request !== this.autocompleteRequest || query !== this.query.trim()) return;
-      this.suggestions.set(suggestions);
-      this.activeSuggestion.set(suggestions.length ? 0 : -1);
-      this.suggestionsOpen.set(suggestions.length > 0);
-    } catch {
-      if (request === this.autocompleteRequest) this.suggestions.set([]);
-    } finally {
-      if (request === this.autocompleteRequest) this.autocompleteBusy.set(false);
-    }
   }
 
   async search() {
     if (this.busy()) return;
-    this.cancelAutocomplete();
     this.error.set('');
     this.matches.set([]);
     this.searched.set(false);
@@ -131,7 +54,6 @@ export class RsvpComponent implements OnDestroy {
       const matches = await this.gateway.findInvitations(this.query.trim());
       this.matches.set(matches);
       this.searched.set(true);
-      if (matches.length === 1) this.chooseInvitation(matches[0]);
     } catch (error) {
       this.error.set(error instanceof Error ? error.message : 'We couldn’t look up your invitation. Please try again.');
     } finally {
@@ -140,7 +62,6 @@ export class RsvpComponent implements OnDestroy {
   }
 
   chooseInvitation(invitation: Invitation) {
-    this.cancelAutocomplete();
     this.invitation.set(invitation);
     this.selectedIds.set([]);
     this.plusOneIds.set([]);
@@ -155,7 +76,6 @@ export class RsvpComponent implements OnDestroy {
     this.invitation.set(null);
     this.selectedIds.set([]);
     this.matches.set([]);
-    this.cancelAutocomplete();
     this.searched.set(false);
     this.receipt.set(null);
     this.goTo(1);
