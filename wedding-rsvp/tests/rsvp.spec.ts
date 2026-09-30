@@ -2,6 +2,12 @@ import { test, expect, Page } from '@playwright/test';
 
 const storageKey = 'wedding-rsvp:mock:v1';
 
+test('mobile RSVP text fields use a font size that prevents browser zoom', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/#rsvp');
+  await expect(page.getByLabel('Name on your invitation')).toHaveCSS('font-size', '16px');
+});
+
 async function findInvitation(page: Page, name = 'Juan & Maria Dela Cruz') {
   await page.goto('/#rsvp');
   await page.getByLabel('Name on your invitation').fill(name);
