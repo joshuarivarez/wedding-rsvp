@@ -30,7 +30,11 @@ export class RsvpComponent {
   private goTo(step: number) {
     this.error.set('');
     this.step.set(step);
-    setTimeout(() => this.stepHeading?.nativeElement.focus({ preventScroll: true }));
+    setTimeout(() => {
+      const heading = this.stepHeading?.nativeElement;
+      heading?.focus({ preventScroll: true });
+      if (step === 5) heading?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   }
 
   queryChanged(value: string) {

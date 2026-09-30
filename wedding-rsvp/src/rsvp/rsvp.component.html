@@ -121,7 +121,7 @@
         <h3 #stepHeading tabindex="-1">Thank you, {{ invitation.greeting }}!</h3>
         <p>{{ receipt.mode === 'mock' ? 'Your RSVP has been saved for this preview.' : 'Your RSVP has been received.' }}</p>
         <p>{{ attendance === 'accepts' ? 'We can’t wait to celebrate with you!' : 'We’ll miss you and will be thinking of you on our special day.' }}</p>
-        <div class="confirmation-summary"><strong>{{ attendance === 'accepts' ? 'Joyfully accepts' : 'Regretfully declines' }}</strong><span>{{ attendance === 'accepts' ? selectedIds().length : 0 }} {{ attendance === 'accepts' && selectedIds().length === 1 ? 'guest' : 'guests' }} attending</span></div>
+        <div class="confirmation-summary"><strong>{{ attendance === 'accepts' ? 'Joyfully accepts' : 'Regretfully declines' }}</strong><span>{{ attendance === 'accepts' ? selectedIds().length + plusOneIds().length : 0 }} {{ attendance === 'accepts' && selectedIds().length + plusOneIds().length === 1 ? 'guest' : 'guests' }} attending</span></div>
         @if (receipt.mode === 'mock') {<p class="preview-notice">This is a mock RSVP, saved only in this browser. Nothing has been sent to the couple.</p>}
         <button class="button submit" (click)="edit()">Edit RSVP<span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button>
         <button class="back-button" (click)="findAgain()">Find another invitation</button>

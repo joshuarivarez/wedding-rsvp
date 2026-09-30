@@ -71,15 +71,17 @@ test('requires identity and attendance, saves only listed guests with optional d
   await expect(page.locator('.guest-instructions')).toContainText('Check each invited person');
   await expect(page.locator('.guest-checklist')).toContainText('Spouse');
   await page.getByRole('checkbox', { name: /Juan Dela Cruz/ }).check();
+  await page.getByRole('checkbox', { name: 'Have + 1' }).check();
   await expect(page.getByRole('checkbox', { name: /Maria Dela Cruz/ }).locator('xpath=..')).toContainText('Not attending');
   await page.getByLabel('A short message for the couple').fill('So happy for you both!');
   await page.getByRole('button', { name: 'Confirm RSVP', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Thank you, Juan & Maria!' })).toBeVisible();
+  await expect(page.locator('.confirmation-summary')).toContainText('2 guests attending');
   await expect(page.locator('.rsvp-confirmation')).toContainText('Nothing has been sent to the couple');
   const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)!), storageKey);
   expect(saved['demo-dela-cruz']).toMatchObject({
     invitationId: 'demo-dela-cruz', attendance: 'accepts', guestIds: ['demo-juan-dela-cruz'],
-    message: 'So happy for you both!',
+    plusOneGuestIds: ['demo-juan-dela-cruz'], message: 'So happy for you both!',
   });
 });
 
