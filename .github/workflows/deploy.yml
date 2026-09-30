@@ -36,7 +36,7 @@ jobs:
 
       - name: Build Angular
         working-directory: ./wedding-rsvp
-        run: npm run build -- --base-href /wedding-rsvp/
+        run: npm run build
 
       - name: Show build output
         working-directory: ./wedding-rsvp
