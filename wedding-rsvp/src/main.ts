@@ -1,5 +1,5 @@
 import { WeddingCountdown } from './wedding-countdown';
-import { Component, AfterViewInit, OnDestroy, signal } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ElementRef, ViewChild, signal } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { WeddingLogo } from './wedding-logo';
 import { AutumnLeaves } from './autumn-leaves';
@@ -14,9 +14,21 @@ import { SHEETS_WEB_APP_URL } from './rsvp/sheets.config';
 class App implements AfterViewInit, OnDestroy {
   readonly pendingSheetsRequests = pendingSheetsRequests;
   menu = signal(false);
+  musicPlaying = signal(false);
+  musicCollapsed = signal(true);
+  @ViewChild('musicAudio') musicAudio?: ElementRef<HTMLAudioElement>;
   observer?: IntersectionObserver;
   closeMenu() { this.menu.set(false); }
+  async toggleMusic(audio: HTMLAudioElement) {
+    if (audio.paused) {
+      try { await audio.play(); } catch { this.musicPlaying.set(false); }
+    } else {
+      audio.pause();
+    }
+  }
   ngAfterViewInit() {
+    const playback = this.musicAudio?.nativeElement.play();
+    playback?.catch(() => this.musicPlaying.set(false));
     this.observer = new IntersectionObserver(entries => entries.forEach(entry => { if(entry.isIntersecting) { entry.target.classList.add('visible'); this.observer?.unobserve(entry.target); } }), {threshold:0.08});
     document.querySelectorAll('.reveal').forEach(el => this.observer?.observe(el));
   }

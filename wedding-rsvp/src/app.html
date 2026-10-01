@@ -191,3 +191,26 @@
   </article>
 </section>
 </main><footer><a href="#home" class="footer-logo" aria-label="Joshua and Judy Ann home"><wedding-logo /></a><a class="footer-names" href="#home">Joshua <elegant-ampersand /> Judy Ann</a><p>FEBRUARY 08, 2027 <span>·</span> WITH LOVE, ALWAYS</p><span class="footer-heart"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span></footer>
+<aside class="music-player" aria-label="Wedding music player">
+  <audio #musicAudio autoplay loop preload="metadata" (play)="musicPlaying.set(true)" (pause)="musicPlaying.set(false)">
+    <source src="assets/this-is-it.mp3" type="audio/mpeg">
+    Your browser does not support audio playback.
+  </audio>
+  <div class="music-popup" id="music-popup" [hidden]="musicCollapsed()" aria-label="Now playing">
+    <div class="music-popup-copy"><span class="music-label">NOW PLAYING</span><strong>This Is It</strong></div>
+    <button class="music-play-toggle" type="button" (click)="toggleMusic(musicAudio)" [attr.aria-label]="musicPlaying() ? 'Pause music' : 'Play music'" [attr.title]="musicPlaying() ? 'Pause music' : 'Play music'">
+      @if (musicPlaying()) {
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14m8-14v14"/></svg>
+      } @else {
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 5 12 7-12 7V5Z"/></svg>
+      }
+    </button>
+  </div>
+  <button class="music-launcher" type="button" (click)="musicCollapsed.set(!musicCollapsed())" [attr.aria-expanded]="!musicCollapsed()" aria-controls="music-popup" [attr.aria-label]="musicCollapsed() ? 'Open music player' : 'Close music player'" [attr.title]="musicCollapsed() ? 'Open music player' : 'Close music player'">
+    @if (musicCollapsed()) {
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    } @else {
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    }
+  </button>
+</aside>
