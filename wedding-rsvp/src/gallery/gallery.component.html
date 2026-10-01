@@ -7,7 +7,7 @@
 
   <div class="gallery-grid">
     @for (photo of photos; track photo.src; let index = $index) {
-      <button #galleryButton type="button" class="gallery-item" [class]="photo.layout"
+      <button #galleryButton type="button" class="gallery-item" [class]="photo.layout" [attr.data-sort]="photo.sort"
         (click)="open(index)" [attr.aria-label]="'Open photo: ' + photo.caption">
         <img [src]="photo.src" [alt]="photo.alt" loading="lazy" decoding="async">
         <time class="gallery-date" [attr.datetime]="photo.date.iso">{{ photo.date.label }}</time>

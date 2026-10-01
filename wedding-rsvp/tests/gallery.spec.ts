@@ -4,8 +4,11 @@ test('shows a date at the top center of every gallery photo', async ({ page }) =
   await page.goto('/#gallery');
   const photos = page.locator('#gallery .gallery-item');
   await expect(page.locator('#gallery .gallery-date')).toHaveCount(await photos.count());
+  const sortValues = await photos.evaluateAll((elements) =>
+    elements.map((element) => Number(element.getAttribute('data-sort')))
+  );
+  expect(sortValues).toEqual([...sortValues].sort((first, second) => first - second));
   const date = page.locator('#gallery .gallery-date').first();
-  await expect(date).toHaveText('08.02.20');
   const dateBox = await date.boundingBox();
   const photoBox = await photos.first().boundingBox();
   expect(dateBox).not.toBeNull();

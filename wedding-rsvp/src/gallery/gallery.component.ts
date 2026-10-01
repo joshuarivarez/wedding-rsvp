@@ -6,6 +6,7 @@ interface GalleryPhoto {
   caption: string;
   date: { label: string; iso: string };
   layout: 'wide' | 'tall' | 'standard';
+  sort: number;
 }
 
 @Component({
@@ -18,16 +19,16 @@ export class GalleryComponent implements OnDestroy {
   @ViewChildren('galleryButton') private galleryButtons?: QueryList<ElementRef<HTMLButtonElement>>;
   @ViewChild('closeButton') private closeButton?: ElementRef<HTMLButtonElement>;
 
-  readonly photos: readonly GalleryPhoto[] = [
-    { src: 'assets/gallery-images/moment-to-remember.JPG', alt: 'A favorite moment from our photo collection', caption: 'A moment to remember', date: { label: '08.02.20', iso: '2020-08-02' }, layout: 'wide' },
-    { src: 'assets/gallery-images/6R2.JPG', alt: 'A favorite moment from our photo collection', caption: 'Together, always', date: { label: '09.27.25', iso: '2025-09-27' }, layout: 'tall' },
-    { src: 'assets/gallery-images/little-things.JPG', alt: 'A favorite moment from our photo collection', caption: 'The little things', date: { label: '09.08.19', iso: '2019-09-08' }, layout: 'standard' },
-    { src: 'assets/gallery-images/hk.JPEG', alt: 'A favorite moment from our photo collection', caption: 'Our forever, our fairytale', date: { label: '10.13.25', iso: '2025-10-13' }, layout: 'standard' },
-    { src: 'assets/gallery-images/favorite-memories.jpg', alt: 'A favorite moment from our photo collection', caption: 'A wish for a lifetime of us', date: { label: '03.20.26', iso: '2026-03-20' }, layout: 'tall' },
-    { src: 'assets/gallery-images/treasure.jpg', alt: 'A favorite moment from our photo collection', caption: 'A lifetime of smiles and laughter', date: { label: '02.12.22', iso: '2022-02-12' }, layout: 'wide' },
-    { src: 'assets/gallery-images/beginning.jpg', alt: 'A favorite moment from our photo collection', caption: 'The beginning of forever', date: { label: '02.07.26', iso: '2026-02-07' }, layout: 'tall' },
-    { src: 'assets/gallery-images/5yrs.jpg', alt: 'A favorite moment from our photo collection', caption: 'A love that grows with every chapter', date: { label: '08.02.25', iso: '2025-08-02' }, layout: 'wide' },
-  ];
+  readonly photos: readonly GalleryPhoto[] = ([
+    { src: 'assets/gallery-images/moment-to-remember.JPG', alt: 'A favorite moment from our photo collection', caption: 'A moment to remember', date: { label: '08.02.20', iso: '2020-08-02' }, layout: 'wide', sort: 2 },
+    { src: 'assets/gallery-images/6R2.JPG', alt: 'A favorite moment from our photo collection', caption: 'Together, always', date: { label: '09.27.25', iso: '2025-09-27' }, layout: 'tall', sort: 4 },
+    { src: 'assets/gallery-images/little-things.JPG', alt: 'A favorite moment from our photo collection', caption: 'The little things', date: { label: '09.08.19', iso: '2019-09-08' }, layout: 'standard', sort: 1 },
+    { src: 'assets/gallery-images/hk.JPEG', alt: 'A favorite moment from our photo collection', caption: 'Our forever, our fairytale', date: { label: '10.13.25', iso: '2025-10-13' }, layout: 'tall', sort: 6 },
+    { src: 'assets/gallery-images/favorite-memories.jpg', alt: 'A favorite moment from our photo collection', caption: 'A wish for a lifetime of us', date: { label: '03.20.26', iso: '2026-03-20' }, layout: 'tall', sort: 7 },
+    { src: 'assets/gallery-images/treasure.jpg', alt: 'A favorite moment from our photo collection', caption: 'A lifetime of smiles and laughter', date: { label: '02.12.22', iso: '2022-02-12' }, layout: 'wide', sort: 3 },
+    { src: 'assets/gallery-images/beginning.jpg', alt: 'A favorite moment from our photo collection', caption: 'The beginning of forever', date: { label: '02.07.26', iso: '2026-02-07' }, layout: 'tall', sort: 8 },
+    { src: 'assets/gallery-images/5yrs.jpg', alt: 'A favorite moment from our photo collection', caption: 'A love that grows with every chapter', date: { label: '08.02.25', iso: '2025-08-02' }, layout: 'wide', sort: 5 },
+  ] satisfies GalleryPhoto[]).sort((first, second) => first.sort - second.sort);
 
   readonly activeIndex = signal<number | null>(null);
   readonly activePhoto = computed(() => {
